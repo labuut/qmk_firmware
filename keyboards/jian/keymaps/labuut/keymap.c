@@ -609,13 +609,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Wildcards (all in one layer)
     [2] = LAYOUT(
         // 1st row:
-        TO(0), MACRO_GRAVE, MACRO_EXLM, MACRO_QUES, MACRO_AT, MACRO_LPRN, MACRO_RPRN,                       MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_NO,
+        TO(0), MACRO_TILD, MACRO_NUMBER, MACRO_AT, MACRO_DLR, MACRO_LBRACKET, MACRO_RBRACKET,                   MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_NO,
         // 2nd row:
-        MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_HASH, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
+        MACRO_GRAVE, MACRO_PRCNT, MACRO_QUES, MACRO_EXLM, MACRO_LPRN, MACRO_RPRN,                               MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
         // 3rd row:
-        KC_LCTL, MACRO_LT, MACRO_GT, MACRO_PRCNT, MACRO_LBRACKET, MACRO_RBRACKET,                           MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_COMMA, MACRO_DOT, MACRO_NUMBER,
+        MACRO_CIRC, MACRO_HASH, MACRO_LT, MACRO_GT, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                       MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_COMMA, MACRO_DOT, KC_NO,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                     KC_SPC, KC_DEL, KC_NO
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                         KC_SPC, KC_DEL, KC_NO
     ),
     // // Wildcards (1 half)
     // [2] = LAYOUT(
