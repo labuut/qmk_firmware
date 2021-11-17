@@ -2,282 +2,442 @@
 
 
 enum macros {
-    ST_MACRO_NOTIF = SAFE_RANGE,
-    // Wildcards_EN macros:
-    ST_MACRO_EN_GRAVE,
-    ST_MACRO_EN_EXLM,
-    ST_MACRO_EN_QUES,
-    ST_MACRO_EN_AT,
-    ST_MACRO_EN_LPRN,
-    ST_MACRO_EN_RPRN,
-    ST_MACRO_EN_AMPR,
-    ST_MACRO_EN_COMMA,
-    ST_MACRO_EN_DOT,
-    ST_MACRO_EN_SCOLON,
-    ST_MACRO_EN_COLON,
-    ST_MACRO_EN_TILD,
-    ST_MACRO_EN_CIRC,
-    ST_MACRO_EN_DLR,
-    ST_MACRO_EN_HASH,
-    ST_MACRO_EN_LCRVBRACKET,
-    ST_MACRO_EN_RCRVBRACKET,
-    ST_MACRO_EN_ASTRX,
-    ST_MACRO_EN_QUOTE,
-    ST_MACRO_EN_DQUOTE,
-    ST_MACRO_EN_EQUAL,
-    ST_MACRO_EN_PLUS,
-    ST_MACRO_EN_LT,
-    ST_MACRO_EN_GT,
-    ST_MACRO_EN_PRCNT,
-    ST_MACRO_EN_LBRACKET,
-    ST_MACRO_EN_RBRACKET,
-    ST_MACRO_EN_SLASH,
-    ST_MACRO_EN_PIPE,
-    ST_MACRO_EN_BSLASH,
-    ST_MACRO_EN_LODASH,
-    ST_MACRO_EN_MINUS,
-    ST_MACRO_EN_NUMBER,
+    MACRO_NOTIF = SAFE_RANGE,
+    MACRO_RU,
+    MACRO_EN,
+    MACRO_SWITCH_LANG,
+    // Wildcards macros:
+    MACRO_GRAVE,
+    MACRO_EXLM,
+    MACRO_QUES,
+    MACRO_AT,
+    MACRO_LPRN,
+    MACRO_RPRN,
+    MACRO_AMPR,
+    MACRO_COMMA,
+    MACRO_DOT,
+    MACRO_SCOLON,
+    MACRO_COLON,
+    MACRO_TILD,
+    MACRO_CIRC,
+    MACRO_DLR,
+    MACRO_HASH,
+    MACRO_LCRVBRACKET,
+    MACRO_RCRVBRACKET,
+    MACRO_ASTRX,
+    MACRO_QUOTE,
+    MACRO_DQUOTE,
+    MACRO_EQUAL,
+    MACRO_PLUS,
+    MACRO_LT,
+    MACRO_GT,
+    MACRO_PRCNT,
+    MACRO_LBRACKET,
+    MACRO_RBRACKET,
+    MACRO_SLASH,
+    MACRO_PIPE,
+    MACRO_BSLASH,
+    MACRO_LODASH,
+    MACRO_MINUS,
+    MACRO_NUMBER,
 };
+
+int lang = 0; // 0 === EN, 1 === RU
 
 // Macro definitions
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     switch (keycode) {
     // open notifications and move cursor to 'clear notifications'
-    case ST_MACRO_NOTIF:
+    case MACRO_NOTIF:
         if (record->event.pressed) {
-            SEND_STRING(SS_LGUI(SS_TAP(X_N)) SS_DELAY(10) SS_LCTL(SS_LSFT(SS_LALT(SS_TAP(X_N)))));
+            SEND_STRING(SS_LGUI(SS_TAP(X_N)) SS_DELAY(5) SS_LCTL(SS_LSFT(SS_LALT(SS_TAP(X_N)))));
+        }
+        break;
+    // set lang var when lang changes to RU
+    case MACRO_RU:
+        if (record->event.pressed) {
+            SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            lang = 1;
+        }
+        break;
+
+    // set lang var when lang changes to EN
+    case MACRO_EN:
+        if (record->event.pressed) {
+            SEND_STRING(SS_TAP(X_CAPSLOCK));
+            lang = 0;
+        }
+        break;
+
+    // switch lang var to next
+    case MACRO_SWITCH_LANG:
+        if (record->event.pressed) {
+            SEND_STRING(SS_DELAY(5));
+            lang = (lang == 0) ? 1 : 0;
         }
         break;
 
     // Wildcards_EN macros
     // en -> `
-    case ST_MACRO_EN_GRAVE:
+    case MACRO_GRAVE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_GRAVE));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_GRAVE));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> !
-    case ST_MACRO_EN_EXLM:
+    case MACRO_EXLM:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_1)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_1)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ?
-    case ST_MACRO_EN_QUES:
+    case MACRO_QUES:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_SLASH)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_SLASH)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> @
-    case ST_MACRO_EN_AT:
+    case MACRO_AT:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_2)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_2)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> (
-    case ST_MACRO_EN_LPRN:
+    case MACRO_LPRN:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_9)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_9)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> )
-    case ST_MACRO_EN_RPRN:
+    case MACRO_RPRN:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_0)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_0)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> &
-    case ST_MACRO_EN_AMPR:
+    case MACRO_AMPR:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_7)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_7)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ,
-    case ST_MACRO_EN_COMMA:
+    case MACRO_COMMA:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_COMMA));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_COMMA));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> .
-    case ST_MACRO_EN_DOT:
+    case MACRO_DOT:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_DOT));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_DOT));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ;
-    case ST_MACRO_EN_SCOLON:
+    case MACRO_SCOLON:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_SCOLON));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_SCOLON));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> :
-    case ST_MACRO_EN_COLON:
+    case MACRO_COLON:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_SCOLON)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_SCOLON)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ~
-    case ST_MACRO_EN_TILD:
+    case MACRO_TILD:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_GRAVE)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_GRAVE)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ^
-    case ST_MACRO_EN_CIRC:
+    case MACRO_CIRC:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_6)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_6)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> $
-    case ST_MACRO_EN_DLR:
+    case MACRO_DLR:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_4)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_4)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> #
-    case ST_MACRO_EN_HASH:
+    case MACRO_HASH:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_3)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_3)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> {
-    case ST_MACRO_EN_LCRVBRACKET:
+    case MACRO_LCRVBRACKET:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_LBRACKET)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_LBRACKET)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> }
-    case ST_MACRO_EN_RCRVBRACKET:
+    case MACRO_RCRVBRACKET:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_RBRACKET)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_RBRACKET)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> *
-    case ST_MACRO_EN_ASTRX:
+    case MACRO_ASTRX:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_8)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_8)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> '
-    case ST_MACRO_EN_QUOTE:
+    case MACRO_QUOTE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_QUOTE));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_QUOTE));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> "
-    case ST_MACRO_EN_DQUOTE:
+    case MACRO_DQUOTE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_QUOTE)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_QUOTE)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> =
-    case ST_MACRO_EN_EQUAL:
+    case MACRO_EQUAL:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_EQUAL));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_EQUAL));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> +
-    case ST_MACRO_EN_PLUS:
+    case MACRO_PLUS:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_EQUAL)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_EQUAL)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> <
-    case ST_MACRO_EN_LT:
+    case MACRO_LT:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_COMMA)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_COMMA)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> >
-    case ST_MACRO_EN_GT:
+    case MACRO_GT:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_DOT)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_DOT)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> %
-    case ST_MACRO_EN_PRCNT:
+    case MACRO_PRCNT:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_5)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_5)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> [
-    case ST_MACRO_EN_LBRACKET:
+    case MACRO_LBRACKET:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_LBRACKET));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_LBRACKET));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> ]
-    case ST_MACRO_EN_RBRACKET:
+    case MACRO_RBRACKET:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_RBRACKET));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_RBRACKET));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> /
-    case ST_MACRO_EN_SLASH:
+    case MACRO_SLASH:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_SLASH));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_SLASH));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> |
-    case ST_MACRO_EN_PIPE:
+    case MACRO_PIPE:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_BSLASH)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_BSLASH)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> '\'
-    case ST_MACRO_EN_BSLASH:
+    case MACRO_BSLASH:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_BSLASH));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_BSLASH));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> _
-    case ST_MACRO_EN_LODASH:
+    case MACRO_LODASH:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_LSFT(SS_TAP(X_MINUS)));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_LSFT(SS_TAP(X_MINUS)));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> -
-    case ST_MACRO_EN_MINUS:
+    case MACRO_MINUS:
         if (record->event.pressed) {
-            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(10) SS_TAP(X_MINUS));
+            SEND_STRING(SS_TAP(X_CAPSLOCK) SS_DELAY(5) SS_TAP(X_MINUS));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
 
     // en -> №
-    case ST_MACRO_EN_NUMBER:
+    case MACRO_NUMBER:
         if (record->event.pressed) {
-            SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)) SS_DELAY(10) SS_LSFT(SS_TAP(X_3)) SS_DELAY(10) SS_TAP(X_CAPSLOCK));
+            SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)) SS_DELAY(5) SS_LSFT(SS_TAP(X_3)) SS_DELAY(5) SS_TAP(X_CAPSLOCK));
+
+            if (lang == 1) {
+                SEND_STRING(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            }
         }
         break;
     }
@@ -292,8 +452,9 @@ enum tap_dances {
     TD_T,
     TD_U,
     TD_PLAY,
-    TD_LANG,
+    // TD_LANG,
     TD_BSPC,
+    TD_SOFT_HARD,
 };
 
 // this code is a copy from moonlander to support tap dance with TAP/DOUBLE-TAP/HOLD
@@ -309,7 +470,7 @@ enum {
     DOUBLE_TAP,
     DOUBLE_HOLD,
     DOUBLE_SINGLE_TAP,
-    MORE_TAPS
+    MORE_TAPS,
 };
 
 static tap dance_state[1];
@@ -328,42 +489,42 @@ uint8_t dance_step(qk_tap_dance_state_t *state) {
     return MORE_TAPS;
 }
 
-// dance tap TD_LANG
-void on_dance_lang(qk_tap_dance_state_t *state, void *user_data);
-void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data);
-void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data);
+// // dance tap TD_LANG
+// void on_dance_lang(qk_tap_dance_state_t *state, void *user_data);
+// void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data);
+// void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data);
 
-void on_dance_lang(qk_tap_dance_state_t *state, void *user_data) {
-    if(state->count == 3) {
-        tap_code16(KC_CAPSLOCK);
-        tap_code16(KC_CAPSLOCK);
-        tap_code16(KC_CAPSLOCK);
-    }
-    if(state->count > 3) {
-        tap_code16(KC_CAPSLOCK);
-    }
-}
+// void on_dance_lang(qk_tap_dance_state_t *state, void *user_data) {
+//     if(state->count == 3) {
+//         tap_code16(KC_CAPSLOCK);
+//         tap_code16(KC_CAPSLOCK);
+//         tap_code16(KC_CAPSLOCK);
+//     }
+//     if(state->count > 3) {
+//         tap_code16(KC_CAPSLOCK);
+//     }
+// }
 
-void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data) {
-    dance_state[0].step = dance_step(state);
-    switch (dance_state[0].step) {
-        case SINGLE_TAP: register_code16(KC_CAPSLOCK); break;
-        case SINGLE_HOLD: layer_on(2); break;
-        case DOUBLE_TAP: register_code16(LSFT(KC_CAPSLOCK)); break;
-        case DOUBLE_SINGLE_TAP: tap_code16(KC_CAPSLOCK); register_code16(KC_CAPSLOCK);
-    }
-}
+// void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data) {
+//     dance_state[0].step = dance_step(state);
+//     switch (dance_state[0].step) {
+//         case SINGLE_TAP: register_code16(KC_CAPSLOCK); break;
+//         case SINGLE_HOLD: layer_on(2); break;
+//         case DOUBLE_TAP: register_code16(LSFT(KC_CAPSLOCK)); break;
+//         case DOUBLE_SINGLE_TAP: tap_code16(KC_CAPSLOCK); register_code16(KC_CAPSLOCK);
+//     }
+// }
 
-void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data) {
-    wait_ms(10);
-    switch (dance_state[0].step) {
-        case SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
-        case SINGLE_HOLD: layer_off(2); break;
-        case DOUBLE_TAP: unregister_code16(LSFT(KC_CAPSLOCK)); break;
-        case DOUBLE_SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
-    }
-    dance_state[0].step = 0;
-}
+// void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data) {
+//     wait_ms(10);
+//     switch (dance_state[0].step) {
+//         case SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
+//         case SINGLE_HOLD: layer_off(2); break;
+//         case DOUBLE_TAP: unregister_code16(LSFT(KC_CAPSLOCK)); break;
+//         case DOUBLE_SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
+//     }
+//     dance_state[0].step = 0;
+// }
 
 // dance tap TD_BSPC
 void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data);
@@ -410,7 +571,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_U] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_U), LALT(LGUI(KC_U))),     // Windows: Presentation / Greed
     [TD_H] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_H), LALT(LGUI(KC_H))),     // Krunner / Apps
     [TD_PLAY] = ACTION_TAP_DANCE_DOUBLE(KC_MPLY, LALT(LSFT(KC_B))),     // Play / Like (Spotify)
-    [TD_LANG] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_lang, dance_lang_finished, dance_lang_reset),  // ENG / RU / MO2 (Wildcards)
+    [TD_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),            // Ь / Ъ
+    // [TD_LANG] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_lang, dance_lang_finished, dance_lang_reset),  // ENG / RU / MO2 (Wildcards)
     [TD_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_bspc, dance_bspc_finished, dance_bspc_reset),  // bspace / ctrl+bspace / MO5 (OS)
 };
 
@@ -419,98 +581,86 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Layers:
     // 0 - Main
     // 1 - Digits
-    // 2 - Wildcards
-    // 3 - Arrows
-    // 4 - Mouse
+    // 2 - Wildcards (1 half)
+    // 3 - Wildcards (2 half)
+    // 4 - Cursor
     // 5 - OS
     // 6 - Service
     [0] = LAYOUT(
         // 1st row:
-        LT(5, KC_ESC), KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                        KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, TO(6),
+        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, MACRO_EN,
         // 2nd row:
-        KC_LALT, KC_A, KC_S, KC_D, KC_F, KC_G,                                      KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+        KC_LALT, LT(4, KC_A), KC_S, KC_D, KC_F, KC_G,                                       KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
         // 3rd row:
-        KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_COMM, KC_DOT, KC_SLSH, KC_RBRC,
+        KC_LCTL, LT(2, KC_Z), KC_X, KC_C, KC_V, KC_B,                                       KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, KC_NO, MACRO_RU,
         // 4th row:
-        OSM(MOD_LSFT), TD(TD_BSPC), LT(1, KC_ENT),                                  LT(3, KC_SPC), LT(4, KC_DEL), TD(TD_LANG)
+        OSM(MOD_LSFT), TD(TD_BSPC), LT(5, KC_ENT),                                          KC_SPC, KC_DEL, MO(2)
     ),
     // Digits, Fns
 	[1] = LAYOUT(
         // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                          KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_RALT, KC_NLCK,
+        TO(0), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                                  KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_RALT, KC_NO,
         // 2nd row:
-        KC_LALT, KC_NO, KC_F4, TD(TD_F5), KC_F6, KC_F11,                            KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
+        KC_LALT, KC_NO, KC_F4, TD(TD_F5), KC_F6, KC_F11,                                    KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
         // 3rd row:
-        KC_LCTL, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NO,
+        KC_LCTL, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                        KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NLCK,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_NO,                                              KC_SPC, KC_DEL, KC_NO
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                     KC_SPC, KC_DEL, KC_NO
 
     ),
-    // Wildcards EN
+    // Wildcards (1 half)
     [2] = LAYOUT(
         // 1st row:
-        // left (7)
-        TO(0), ST_MACRO_EN_GRAVE, ST_MACRO_EN_EXLM, ST_MACRO_EN_QUES, ST_MACRO_EN_AT, ST_MACRO_EN_LPRN, ST_MACRO_EN_RPRN,
-        // right (7)
-        ST_MACRO_EN_SLASH, ST_MACRO_EN_PIPE, ST_MACRO_EN_BSLASH, ST_MACRO_EN_LODASH, ST_MACRO_EN_MINUS, KC_NO, KC_NO,
-
+        TO(0), KC_NO, KC_NO, MACRO_HASH, MACRO_PRCNT, MACRO_LBRACKET, KC_NO,                MACRO_SLASH, MACRO_AMPR, KC_NO, KC_NO, MACRO_MINUS, KC_NO, KC_NO,
         // 2nd row:
-        // left (6)
-        ST_MACRO_EN_TILD, ST_MACRO_EN_CIRC, ST_MACRO_EN_DLR, ST_MACRO_EN_HASH, ST_MACRO_EN_LCRVBRACKET, ST_MACRO_EN_RCRVBRACKET,
-        // right (6)
-        ST_MACRO_EN_ASTRX, ST_MACRO_EN_QUOTE, ST_MACRO_EN_DQUOTE, ST_MACRO_EN_EQUAL, ST_MACRO_EN_PLUS, KC_NO,
-
+        MACRO_GRAVE, MACRO_AT, MACRO_DLR, MACRO_EXLM, MACRO_LPRN, MACRO_LT,                 MACRO_ASTRX, MACRO_SCOLON, MACRO_COMMA, MACRO_QUOTE, MACRO_PLUS, KC_NO,
         // 3rd row:
-        // left (6)
-        KC_LCTL, ST_MACRO_EN_LT, ST_MACRO_EN_GT, ST_MACRO_EN_PRCNT, ST_MACRO_EN_LBRACKET, ST_MACRO_EN_RBRACKET,
-        // right (6)
-        ST_MACRO_EN_AMPR, ST_MACRO_EN_SCOLON, ST_MACRO_EN_COLON, ST_MACRO_EN_COMMA, ST_MACRO_EN_DOT, ST_MACRO_EN_NUMBER,
-
+        KC_NO, KC_NO, KC_NO, KC_NO, MACRO_LCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                             KC_SPC, KC_DEL, KC_NO
+        MO(3), KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
     ),
-    // Arrows
+    // Wildcards (2 half)
     [3] = LAYOUT(
         // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                        KC_NO, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO, KC_NO,
+        TO(0), KC_NO, KC_NO, MACRO_NUMBER, MACRO_PRCNT, MACRO_RBRACKET, KC_NO,              MACRO_BSLASH, MACRO_PIPE, KC_NO, KC_NO, MACRO_LODASH, KC_NO, KC_NO,
         // 2nd row:
-        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO,                           KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_LGUI,
+        MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_QUES, MACRO_RPRN, MACRO_GT,                MACRO_ASTRX, MACRO_COLON, MACRO_DOT, MACRO_DQUOTE, MACRO_EQUAL, KC_NO,
         // 3rd row:
-        KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, KC_NO,                             KC_NO, KC_PGUP, KC_NO, KC_PGDN, KC_NO, KC_NO,
+        KC_NO, KC_NO, KC_NO, KC_NO, MACRO_RCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                             KC_NO, KC_DEL, KC_NO
+        KC_NO, KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
     ),
-    // Mouse
-	[4] = LAYOUT(
+    // Cursor
+    [4] = LAYOUT(
         // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                        KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
+        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                                KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
         // 2nd row:
-        KC_LALT, MEH(KC_S), KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                   KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, KC_LGUI,
+        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                               KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, KC_LGUI,
         // 3rd row:
-        KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, KC_NO,                             KC_NO, KC_BTN4, KC_BTN3, KC_BTN5, KC_ACL0, KC_NO,
-        // 4th row:b
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                             KC_SPC, KC_NO, KC_NO
+        KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, MEH(KC_S),                                 KC_NO, KC_BTN4, KC_BTN3, KC_BTN5, KC_ACL0, KC_NO,
+        // 4th row:
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                     KC_NO, KC_DEL, KC_NO
     ),
     // OS
 	[5] = LAYOUT(
         // 1st row:
-        KC_MUTE, KC_NO, LGUI(KC_Q), LGUI(KC_W), KC_NO, LGUI(KC_R), TD(TD_T),        LGUI(KC_Y), TD(TD_U), LGUI(KC_I), LGUI(KC_O), LGUI(KC_P), KC_PSCR, LALT(LGUI(KC_Q)),
+        TO(0), KC_NO, LGUI(KC_Q), LGUI(KC_W), KC_NO, LGUI(KC_R), TD(TD_T),                  LGUI(KC_Y), TD(TD_U), KC_NO, LGUI(KC_O), LGUI(KC_P), KC_PSCR, TO(6),
         // 2nd row:
-        KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),          TD(TD_H), LGUI(KC_J), LGUI(KC_K), LGUI(KC_L), LGUI(KC_SCLN), KC_NO,
+        KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),                  TD(TD_H), KC_NO, KC_NO, KC_NO, LGUI(KC_SCLN), LALT(LGUI(KC_Q)),
         // 3rd row:
-        KC_NO, LGUI(KC_Z), LGUI(KC_X), KC_NO, LGUI(KC_V), KC_NO,                    ST_MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), LGUI(KC_DOT), LGUI(KC_SLSH), TO(0),
+        KC_NO, LGUI(KC_Z), LGUI(KC_X), KC_NO, LGUI(KC_V), KC_MUTE,                          MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), KC_NO, LGUI(KC_SLSH), KC_NO,
         // 4th row:
-        KC_VOLD, KC_NO, KC_VOLU,                                                    TD(TD_PLAY), KC_MPRV, KC_MNXT
+        KC_VOLD, KC_VOLU, KC_NO,                                                            TD(TD_PLAY), KC_MPRV, KC_MNXT
     ),
     // Service
 	[6] = LAYOUT(
         // 1st row:
-        TO(0), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        TO(0), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                    RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 2nd row:
-        KC_NO, KC_NO, TO(4), TO(5), KC_NO, KC_NO,                                   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_NO, KC_NO, TO(4), TO(5), KC_NO, KC_NO,                                           KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 3rd row:
-        KC_NO, KC_NO, TO(1), TO(2), TO(3), KC_NO,                                   KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_NO, KC_NO, TO(1), TO(2), TO(3), KC_NO,                                           KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 4th row:
-        KC_NO, KC_NO, KC_NO,                                                        KC_NO, KC_NO, KC_NO
+        KC_NO, KC_NO, KC_NO,                                                                KC_NO, KC_NO, MACRO_SWITCH_LANG
     )
 };
