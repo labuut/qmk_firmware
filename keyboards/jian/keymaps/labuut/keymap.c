@@ -453,41 +453,41 @@ enum tap_dances {
     TD_U,
     TD_PLAY,
     // TD_LANG,
-    TD_BSPC,
+    // TD_BSPC,
     TD_SOFT_HARD,
 };
 
-// this code is a copy from moonlander to support tap dance with TAP/DOUBLE-TAP/HOLD
-// [BEGINING]
-typedef struct {
-    bool is_press_action;
-    uint8_t step;
-} tap;
+// // this code is a copy from moonlander to support tap dance with TAP/DOUBLE-TAP/HOLD
+// // [BEGINING]
+// typedef struct {
+//     bool is_press_action;
+//     uint8_t step;
+// } tap;
 
-enum {
-    SINGLE_TAP = 1,
-    SINGLE_HOLD,
-    DOUBLE_TAP,
-    DOUBLE_HOLD,
-    DOUBLE_SINGLE_TAP,
-    MORE_TAPS,
-};
+// enum {
+//     SINGLE_TAP = 1,
+//     SINGLE_HOLD,
+//     DOUBLE_TAP,
+//     DOUBLE_HOLD,
+//     DOUBLE_SINGLE_TAP,
+//     MORE_TAPS,
+// };
 
-static tap dance_state[1];
+// static tap dance_state[1];
 
-uint8_t dance_step(qk_tap_dance_state_t *state);
+// uint8_t dance_step(qk_tap_dance_state_t *state);
 
-uint8_t dance_step(qk_tap_dance_state_t *state) {
-    if (state->count == 1) {
-        if (state->interrupted || !state->pressed) return SINGLE_TAP;
-        else return SINGLE_HOLD;
-    } else if (state->count == 2) {
-        if (state->interrupted) return DOUBLE_SINGLE_TAP;
-        else if (state->pressed) return DOUBLE_HOLD;
-        else return DOUBLE_TAP;
-    }
-    return MORE_TAPS;
-}
+// uint8_t dance_step(qk_tap_dance_state_t *state) {
+//     if (state->count == 1) {
+//         if (state->interrupted || !state->pressed) return SINGLE_TAP;
+//         else return SINGLE_HOLD;
+//     } else if (state->count == 2) {
+//         if (state->interrupted) return DOUBLE_SINGLE_TAP;
+//         else if (state->pressed) return DOUBLE_HOLD;
+//         else return DOUBLE_TAP;
+//     }
+//     return MORE_TAPS;
+// }
 
 // // dance tap TD_LANG
 // void on_dance_lang(qk_tap_dance_state_t *state, void *user_data);
@@ -526,42 +526,42 @@ uint8_t dance_step(qk_tap_dance_state_t *state) {
 //     dance_state[0].step = 0;
 // }
 
-// dance tap TD_BSPC
-void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data);
-void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data);
-void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data);
+// // dance tap TD_BSPC
+// void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data);
+// void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data);
+// void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data);
 
-void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data) {
-    if(state->count == 3) {
-        tap_code16(KC_BSPC);
-        tap_code16(KC_BSPC);
-        tap_code16(KC_BSPC);
-    }
-    if(state->count > 3) {
-        tap_code16(KC_BSPC);
-    }
-}
+// void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data) {
+//     if(state->count == 3) {
+//         tap_code16(KC_BSPC);
+//         tap_code16(KC_BSPC);
+//         tap_code16(KC_BSPC);
+//     }
+//     if(state->count > 3) {
+//         tap_code16(KC_BSPC);
+//     }
+// }
 
-void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data) {
-    dance_state[0].step = dance_step(state);
-    switch (dance_state[0].step) {
-        case SINGLE_TAP: register_code16(KC_BSPC); break;
-        case SINGLE_HOLD: layer_on(5); break;
-        case DOUBLE_TAP: register_code16(LSFT(KC_BSPC)); break;
-        case DOUBLE_SINGLE_TAP: tap_code16(KC_BSPC); register_code16(KC_BSPC);
-    }
-}
+// void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data) {
+//     dance_state[0].step = dance_step(state);
+//     switch (dance_state[0].step) {
+//         case SINGLE_TAP: register_code16(KC_BSPC); break;
+//         case SINGLE_HOLD: layer_on(5); break;
+//         case DOUBLE_TAP: register_code16(LSFT(KC_BSPC)); break;
+//         case DOUBLE_SINGLE_TAP: tap_code16(KC_BSPC); register_code16(KC_BSPC);
+//     }
+// }
 
-void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data) {
-    wait_ms(10);
-    switch (dance_state[0].step) {
-        case SINGLE_TAP: unregister_code16(KC_BSPC); break;
-        case SINGLE_HOLD: layer_off(5); break;
-        case DOUBLE_TAP: unregister_code16(LCTL(KC_BSPC)); break;
-        case DOUBLE_SINGLE_TAP: unregister_code16(KC_BSPC); break;
-    }
-    dance_state[0].step = 0;
-}
+// void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data) {
+//     wait_ms(10);
+//     switch (dance_state[0].step) {
+//         case SINGLE_TAP: unregister_code16(KC_BSPC); break;
+//         case SINGLE_HOLD: layer_off(5); break;
+//         case DOUBLE_TAP: unregister_code16(LCTL(KC_BSPC)); break;
+//         case DOUBLE_SINGLE_TAP: unregister_code16(KC_BSPC); break;
+//     }
+//     dance_state[0].step = 0;
+// }
 // [END]
 
 // Tap dance definitions
@@ -573,7 +573,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_PLAY] = ACTION_TAP_DANCE_DOUBLE(KC_MPLY, LALT(LSFT(KC_B))),     // Play / Like (Spotify)
     [TD_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),            // Ь / Ъ
     // [TD_LANG] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_lang, dance_lang_finished, dance_lang_reset),  // ENG / RU / MO2 (Wildcards)
-    [TD_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_bspc, dance_bspc_finished, dance_bspc_reset),  // bspace / ctrl+bspace / MO5 (OS)
+    // [TD_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_bspc, dance_bspc_finished, dance_bspc_reset),  // bspace / ctrl+bspace / MO5 (OS)
 };
 
 // Keymaps
@@ -581,86 +581,95 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Layers:
     // 0 - Main
     // 1 - Digits
-    // 2 - Wildcards (1 half)
-    // 3 - Wildcards (2 half)
-    // 4 - Cursor
-    // 5 - OS
-    // 6 - Service
+    // 2 - Wildcards
+    // 3 - Cursor
+    // 4 - OS
+    // 5 - Service
     [0] = LAYOUT(
         // 1st row:
-        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, MACRO_EN,
+        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                   KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, MACRO_EN,
         // 2nd row:
-        KC_LALT, LT(4, KC_A), KC_S, KC_D, KC_F, KC_G,                                       KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+        KC_LALT, LT(3, KC_A), KC_S, KC_D, KC_F, KC_G,                                   KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
         // 3rd row:
-        KC_LCTL, LT(2, KC_Z), KC_X, KC_C, KC_V, KC_B,                                       KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, KC_NO, MACRO_RU,
+        KC_LCTL, LT(2, KC_Z), KC_X, KC_C, KC_V, KC_B,                                   KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, KC_NO, MACRO_RU,
         // 4th row:
-        OSM(MOD_LSFT), TD(TD_BSPC), LT(5, KC_ENT),                                          KC_SPC, KC_DEL, MO(2)
+        OSM(MOD_LSFT), KC_BSPC, LT(4, KC_ENT),                                          KC_SPC, KC_DEL, MO(2)
     ),
     // Digits, Fns
 	[1] = LAYOUT(
         // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                                  KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_RALT, KC_NO,
+        TO(0), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                              KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_RALT, KC_NO,
         // 2nd row:
-        KC_LALT, KC_NO, KC_F4, TD(TD_F5), KC_F6, KC_F11,                                    KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
+        KC_LALT, KC_NO, KC_F4, TD(TD_F5), KC_F6, KC_F11,                                KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
         // 3rd row:
-        KC_LCTL, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                        KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NLCK,
+        KC_LCTL, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                    KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NLCK,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                     KC_SPC, KC_DEL, KC_NO
-
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                 KC_SPC, KC_DEL, KC_NO
     ),
-    // Wildcards (1 half)
+    // Wildcards (all in one layer)
     [2] = LAYOUT(
         // 1st row:
-        TO(0), KC_NO, KC_NO, MACRO_HASH, MACRO_PRCNT, MACRO_LBRACKET, KC_NO,                MACRO_SLASH, MACRO_AMPR, KC_NO, KC_NO, MACRO_MINUS, KC_NO, KC_NO,
+        TO(0), MACRO_GRAVE, MACRO_EXLM, MACRO_QUES, MACRO_AT, MACRO_LPRN, MACRO_RPRN,                       MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_NO,
         // 2nd row:
-        MACRO_GRAVE, MACRO_AT, MACRO_DLR, MACRO_EXLM, MACRO_LPRN, MACRO_LT,                 MACRO_ASTRX, MACRO_SCOLON, MACRO_COMMA, MACRO_QUOTE, MACRO_PLUS, KC_NO,
+        MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_HASH, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
         // 3rd row:
-        KC_NO, KC_NO, KC_NO, KC_NO, MACRO_LCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_LCTL, MACRO_LT, MACRO_GT, MACRO_PRCNT, MACRO_LBRACKET, MACRO_RBRACKET,                           MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_COMMA, MACRO_DOT, MACRO_NUMBER,
         // 4th row:
-        MO(3), KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                     KC_SPC, KC_DEL, KC_NO
     ),
-    // Wildcards (2 half)
+    // // Wildcards (1 half)
+    // [2] = LAYOUT(
+    //     // 1st row:
+    //     TO(0), KC_NO, KC_NO, MACRO_HASH, MACRO_PRCNT, MACRO_LBRACKET, KC_NO,                MACRO_SLASH, MACRO_AMPR, KC_NO, KC_NO, MACRO_MINUS, KC_NO, KC_NO,
+    //     // 2nd row:
+    //     MACRO_GRAVE, MACRO_AT, MACRO_DLR, MACRO_EXLM, MACRO_LPRN, MACRO_LT,                 MACRO_ASTRX, MACRO_SCOLON, MACRO_COMMA, MACRO_QUOTE, MACRO_PLUS, KC_NO,
+    //     // 3rd row:
+    //     KC_NO, KC_NO, KC_NO, KC_NO, MACRO_LCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //     // 4th row:
+    //     MO(3), KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
+    // ),
+    // // Wildcards (2 half)
+    // [3] = LAYOUT(
+    //     // 1st row:
+    //     TO(0), KC_NO, KC_NO, MACRO_NUMBER, MACRO_PRCNT, MACRO_RBRACKET, KC_NO,              MACRO_BSLASH, MACRO_PIPE, KC_NO, KC_NO, MACRO_LODASH, KC_NO, KC_NO,
+    //     // 2nd row:
+    //     MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_QUES, MACRO_RPRN, MACRO_GT,                MACRO_ASTRX, MACRO_COLON, MACRO_DOT, MACRO_DQUOTE, MACRO_EQUAL, KC_NO,
+    //     // 3rd row:
+    //     KC_NO, KC_NO, KC_NO, KC_NO, MACRO_RCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    //     // 4th row:
+    //     KC_NO, KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
+    // ),
+    // Cursor
     [3] = LAYOUT(
         // 1st row:
-        TO(0), KC_NO, KC_NO, MACRO_NUMBER, MACRO_PRCNT, MACRO_RBRACKET, KC_NO,              MACRO_BSLASH, MACRO_PIPE, KC_NO, KC_NO, MACRO_LODASH, KC_NO, KC_NO,
+        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                            KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
         // 2nd row:
-        MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_QUES, MACRO_RPRN, MACRO_GT,                MACRO_ASTRX, MACRO_COLON, MACRO_DOT, MACRO_DQUOTE, MACRO_EQUAL, KC_NO,
+        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                           KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, KC_LGUI,
         // 3rd row:
-        KC_NO, KC_NO, KC_NO, KC_NO, MACRO_RCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, MEH(KC_S),                             KC_NO, KC_BTN4, KC_BTN3, KC_BTN5, KC_ACL0, KC_NO,
         // 4th row:
-        KC_NO, KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
-    ),
-    // Cursor
-    [4] = LAYOUT(
-        // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                                KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
-        // 2nd row:
-        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                               KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, KC_LGUI,
-        // 3rd row:
-        KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, MEH(KC_S),                                 KC_NO, KC_BTN4, KC_BTN3, KC_BTN5, KC_ACL0, KC_NO,
-        // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                     KC_NO, KC_DEL, KC_NO
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                 KC_NO, KC_DEL, KC_NO
     ),
     // OS
-	[5] = LAYOUT(
+	[4] = LAYOUT(
         // 1st row:
-        TO(0), KC_NO, LGUI(KC_Q), LGUI(KC_W), KC_NO, LGUI(KC_R), TD(TD_T),                  LGUI(KC_Y), TD(TD_U), KC_NO, LGUI(KC_O), LGUI(KC_P), KC_PSCR, TO(6),
+        TO(0), KC_NO, LGUI(KC_Q), LGUI(KC_W), KC_NO, LGUI(KC_R), TD(TD_T),              LGUI(KC_Y), TD(TD_U), KC_NO, LGUI(KC_O), LGUI(KC_P), KC_PSCR, TO(5),
         // 2nd row:
-        KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),                  TD(TD_H), KC_NO, KC_NO, KC_NO, LGUI(KC_SCLN), LALT(LGUI(KC_Q)),
+        KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),              TD(TD_H), KC_NO, KC_NO, KC_NO, LGUI(KC_SCLN), LALT(LGUI(KC_Q)),
         // 3rd row:
-        KC_NO, LGUI(KC_Z), LGUI(KC_X), KC_NO, LGUI(KC_V), KC_MUTE,                          MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), KC_NO, LGUI(KC_SLSH), KC_NO,
+        KC_NO, LGUI(KC_Z), LGUI(KC_X), KC_NO, LGUI(KC_V), KC_MUTE,                      MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), KC_NO, LGUI(KC_SLSH), KC_NO,
         // 4th row:
-        KC_VOLD, KC_VOLU, KC_NO,                                                            TD(TD_PLAY), KC_MPRV, KC_MNXT
+        KC_VOLD, KC_VOLU, KC_NO,                                                        TD(TD_PLAY), KC_MPRV, KC_MNXT
     ),
     // Service
-	[6] = LAYOUT(
+	[5] = LAYOUT(
         // 1st row:
-        TO(0), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                    RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        TO(0), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 2nd row:
-        KC_NO, KC_NO, TO(4), TO(5), KC_NO, KC_NO,                                           KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_NO, KC_NO, TO(4), KC_NO, KC_NO, KC_NO,                                       KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 3rd row:
-        KC_NO, KC_NO, TO(1), TO(2), TO(3), KC_NO,                                           KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+        KC_NO, KC_NO, TO(1), TO(2), TO(3), KC_NO,                                       KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
         // 4th row:
-        KC_NO, KC_NO, KC_NO,                                                                KC_NO, KC_NO, MACRO_SWITCH_LANG
+        KC_NO, KC_NO, KC_NO,                                                            KC_NO, KC_NO, MACRO_SWITCH_LANG
     )
 };
