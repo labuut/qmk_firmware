@@ -474,13 +474,13 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 5 - Service
     [0] = LAYOUT(
         // 1st row:
-        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                   KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, MACRO_EN,
+        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                   KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_NO,
         // 2nd row:
-        KC_LALT, LT(1, KC_A), KC_S, KC_D, KC_F, KC_G,                                   KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+        KC_LALT, LT(3, KC_A), KC_S, KC_D, KC_F, KC_G,                                   KC_H, KC_J, KC_K, KC_L, LT(3, KC_SCLN), KC_QUOT,
         // 3rd row:
-        KC_LCTL, LT(3, KC_Z), KC_X, KC_C, KC_V, KC_B,                                   KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, KC_NO, MACRO_RU,
+        KC_LCTL, LT(1, KC_Z), KC_X, KC_C, KC_V, KC_B,                                   KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, MACRO_COMMA, MACRO_DOT,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, LT(4, KC_ENT),                                          KC_SPC, KC_DEL, MO(2)
+        OSM(MOD_LSFT), KC_BSPC, LT(4, KC_ENT),                                          KC_SPC, KC_DEL, OSL(2)
     ),
     // Digits, Fns
 	[1] = LAYOUT(
@@ -496,20 +496,20 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // Wildcards (all in one layer)
     [2] = LAYOUT(
         // 1st row:
-        TO(0), MACRO_TILD, MACRO_NUMBER, MACRO_AT, MACRO_DLR, MACRO_LBRACKET, MACRO_RBRACKET,                   MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_NO,
+        TO(0), MACRO_TILD, MACRO_NUMBER, MACRO_AT, MACRO_DLR, MACRO_LBRACKET, MACRO_RBRACKET,                   MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, MACRO_RU,
         // 2nd row:
         MACRO_GRAVE, MACRO_PRCNT, MACRO_QUES, MACRO_EXLM, MACRO_LPRN, MACRO_RPRN,                               MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
         // 3rd row:
-        MACRO_CIRC, MACRO_HASH, MACRO_LT, MACRO_GT, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                       MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_COMMA, MACRO_DOT, KC_NO,
+        KC_NO, MACRO_HASH, MACRO_LT, MACRO_GT, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                            MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_CIRC, MACRO_COMMA, MACRO_DOT,
         // 4th row:
-        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                         KC_SPC, KC_DEL, KC_NO
+        OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                         KC_SPC, KC_NO, MACRO_EN
     ),
     // Cursor
     [3] = LAYOUT(
         // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_HOME, KC_UP, KC_END, KC_NO,                            KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
+        TO(0), KC_TAB, KC_BTN1, KC_HOME, KC_UP, KC_END, KC_NO,                          KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_APP, KC_NO, KC_NO,
         // 2nd row:
-        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                           KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN1, KC_LGUI,
+        KC_LALT, KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, MEH(KC_F),                           KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_LGUI,
         // 3rd row:
         KC_LCTL, KC_NO, KC_PGUP, KC_NO, KC_PGDN, MEH(KC_S),                             KC_NO, KC_BTN4, KC_BTN3, KC_BTN5, KC_ACL0, KC_NO,
         // 4th row:
