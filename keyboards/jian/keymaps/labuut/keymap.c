@@ -451,118 +451,8 @@ enum tap_dances {
     TD_H,
     TD_T,
     TD_U,
-    // TD_PLAY,
-    // TD_LANG,
-    // TD_BSPC,
     TD_SOFT_HARD,
 };
-
-// // this code is a copy from moonlander to support tap dance with TAP/DOUBLE-TAP/HOLD
-// // [BEGINING]
-// typedef struct {
-//     bool is_press_action;
-//     uint8_t step;
-// } tap;
-
-// enum {
-//     SINGLE_TAP = 1,
-//     SINGLE_HOLD,
-//     DOUBLE_TAP,
-//     DOUBLE_HOLD,
-//     DOUBLE_SINGLE_TAP,
-//     MORE_TAPS,
-// };
-
-// static tap dance_state[1];
-
-// uint8_t dance_step(qk_tap_dance_state_t *state);
-
-// uint8_t dance_step(qk_tap_dance_state_t *state) {
-//     if (state->count == 1) {
-//         if (state->interrupted || !state->pressed) return SINGLE_TAP;
-//         else return SINGLE_HOLD;
-//     } else if (state->count == 2) {
-//         if (state->interrupted) return DOUBLE_SINGLE_TAP;
-//         else if (state->pressed) return DOUBLE_HOLD;
-//         else return DOUBLE_TAP;
-//     }
-//     return MORE_TAPS;
-// }
-
-// // dance tap TD_LANG
-// void on_dance_lang(qk_tap_dance_state_t *state, void *user_data);
-// void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data);
-// void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data);
-
-// void on_dance_lang(qk_tap_dance_state_t *state, void *user_data) {
-//     if(state->count == 3) {
-//         tap_code16(KC_CAPSLOCK);
-//         tap_code16(KC_CAPSLOCK);
-//         tap_code16(KC_CAPSLOCK);
-//     }
-//     if(state->count > 3) {
-//         tap_code16(KC_CAPSLOCK);
-//     }
-// }
-
-// void dance_lang_finished(qk_tap_dance_state_t *state, void *user_data) {
-//     dance_state[0].step = dance_step(state);
-//     switch (dance_state[0].step) {
-//         case SINGLE_TAP: register_code16(KC_CAPSLOCK); break;
-//         case SINGLE_HOLD: layer_on(2); break;
-//         case DOUBLE_TAP: register_code16(LSFT(KC_CAPSLOCK)); break;
-//         case DOUBLE_SINGLE_TAP: tap_code16(KC_CAPSLOCK); register_code16(KC_CAPSLOCK);
-//     }
-// }
-
-// void dance_lang_reset(qk_tap_dance_state_t *state, void *user_data) {
-//     wait_ms(10);
-//     switch (dance_state[0].step) {
-//         case SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
-//         case SINGLE_HOLD: layer_off(2); break;
-//         case DOUBLE_TAP: unregister_code16(LSFT(KC_CAPSLOCK)); break;
-//         case DOUBLE_SINGLE_TAP: unregister_code16(KC_CAPSLOCK); break;
-//     }
-//     dance_state[0].step = 0;
-// }
-
-// // dance tap TD_BSPC
-// void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data);
-// void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data);
-// void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data);
-
-// void on_dance_bspc(qk_tap_dance_state_t *state, void *user_data) {
-//     if(state->count == 3) {
-//         tap_code16(KC_BSPC);
-//         tap_code16(KC_BSPC);
-//         tap_code16(KC_BSPC);
-//     }
-//     if(state->count > 3) {
-//         tap_code16(KC_BSPC);
-//     }
-// }
-
-// void dance_bspc_finished(qk_tap_dance_state_t *state, void *user_data) {
-//     dance_state[0].step = dance_step(state);
-//     switch (dance_state[0].step) {
-//         case SINGLE_TAP: register_code16(KC_BSPC); break;
-//         case SINGLE_HOLD: layer_on(5); break;
-//         case DOUBLE_TAP: register_code16(LSFT(KC_BSPC)); break;
-//         case DOUBLE_SINGLE_TAP: tap_code16(KC_BSPC); register_code16(KC_BSPC);
-//     }
-// }
-
-// void dance_bspc_reset(qk_tap_dance_state_t *state, void *user_data) {
-//     wait_ms(10);
-//     switch (dance_state[0].step) {
-//         case SINGLE_TAP: unregister_code16(KC_BSPC); break;
-//         case SINGLE_HOLD: layer_off(5); break;
-//         case DOUBLE_TAP: unregister_code16(LCTL(KC_BSPC)); break;
-//         case DOUBLE_SINGLE_TAP: unregister_code16(KC_BSPC); break;
-//     }
-//     dance_state[0].step = 0;
-// }
-// [END]
 
 // Tap dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
@@ -570,10 +460,7 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_T] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_T), LALT(LGUI(KC_T))),     // Yakuake / Konsole
     [TD_U] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_U), LALT(LGUI(KC_U))),     // Windows: Presentation / Greed
     [TD_H] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_H), LALT(LGUI(KC_H))),     // Krunner / Apps
-    // [TD_PLAY] = ACTION_TAP_DANCE_DOUBLE(KC_MPLY, LALT(LSFT(KC_B))),     // Play / Like (Spotify)
     [TD_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),            // Ь / Ъ
-    // [TD_LANG] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_lang, dance_lang_finished, dance_lang_reset),  // ENG / RU / MO2 (Wildcards)
-    // [TD_BSPC] = ACTION_TAP_DANCE_FN_ADVANCED(on_dance_bspc, dance_bspc_finished, dance_bspc_reset),  // bspace / ctrl+bspace / MO5 (OS)
 };
 
 // Keymaps
@@ -617,28 +504,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
         // 4th row:
         OSM(MOD_LSFT), KC_BSPC, KC_ENT,                                                                         KC_SPC, KC_DEL, KC_NO
     ),
-    // // Wildcards (1 half)
-    // [2] = LAYOUT(
-    //     // 1st row:
-    //     TO(0), KC_NO, KC_NO, MACRO_HASH, MACRO_PRCNT, MACRO_LBRACKET, KC_NO,                MACRO_SLASH, MACRO_AMPR, KC_NO, KC_NO, MACRO_MINUS, KC_NO, KC_NO,
-    //     // 2nd row:
-    //     MACRO_GRAVE, MACRO_AT, MACRO_DLR, MACRO_EXLM, MACRO_LPRN, MACRO_LT,                 MACRO_ASTRX, MACRO_SCOLON, MACRO_COMMA, MACRO_QUOTE, MACRO_PLUS, KC_NO,
-    //     // 3rd row:
-    //     KC_NO, KC_NO, KC_NO, KC_NO, MACRO_LCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    //     // 4th row:
-    //     MO(3), KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
-    // ),
-    // // Wildcards (2 half)
-    // [3] = LAYOUT(
-    //     // 1st row:
-    //     TO(0), KC_NO, KC_NO, MACRO_NUMBER, MACRO_PRCNT, MACRO_RBRACKET, KC_NO,              MACRO_BSLASH, MACRO_PIPE, KC_NO, KC_NO, MACRO_LODASH, KC_NO, KC_NO,
-    //     // 2nd row:
-    //     MACRO_TILD, MACRO_CIRC, MACRO_DLR, MACRO_QUES, MACRO_RPRN, MACRO_GT,                MACRO_ASTRX, MACRO_COLON, MACRO_DOT, MACRO_DQUOTE, MACRO_EQUAL, KC_NO,
-    //     // 3rd row:
-    //     KC_NO, KC_NO, KC_NO, KC_NO, MACRO_RCRVBRACKET, KC_NO,                               KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-    //     // 4th row:
-    //     KC_NO, KC_BSPC, KC_ENT,                                                             KC_SPC, KC_DEL, KC_NO
-    // ),
     // Cursor
     [3] = LAYOUT(
         // 1st row:
