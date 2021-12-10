@@ -463,118 +463,124 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [TD_U] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_U), LALT(LGUI(KC_U))),     // Windows: Presentation / Greed
     [TD_H] = ACTION_TAP_DANCE_DOUBLE(LGUI(KC_H), LALT(LGUI(KC_H))),     // Krunner / Apps
     [TD_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),            // Ь / Ъ
+    [TD_SMCLN] = ACTION_TAP_DANCE_DOUBLE(MEH(KC_SCLN), KC_SCLN),        // Ctrl+Shift+Alt+; / ;
     [TD_LBRACKET] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_LBRC), LSFT(LCTL(KC_LBRC))),     // Ctrl+[ / Ctrl+Shift+[
     [TD_RBRACKET] = ACTION_TAP_DANCE_DOUBLE(LCTL(KC_RBRC), LSFT(LCTL(KC_RBRC))),     // Ctrl+] / Ctrl+Shift+]
 };
 
+enum layers {
+    _MAIN,
+    _DIGITS,
+    _WILDS,
+    _ARROWS,
+    _MOUSE,
+    _KEYNAV,
+    _OS,
+    _GAME1,
+    _GAME2,
+    _SERVICE
+};
+
 // Keymaps
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
-    // Layers:
-    // 0 - Main
-    // 1 - Digits
-    // 2 - Wildcards
-    // 3 - Arrows
-    // 4 - Mouse
-    // 5 - OS
-    // 7 - Game 1
-    // 8 - Game 2
-    // 6 - Service
-    [0] = LAYOUT(
-        // 1st row:
-        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                   KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_ENT,
-        // 2nd row:
-        KC_LALT, LT(3, KC_A), KC_S, KC_D, KC_F, KC_G,                                   KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
-        // 3rd row:
-        KC_LCTL, LT(4, KC_Z), KC_X, KC_C, KC_V, KC_B,                                   KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, MACRO_COMMA, MACRO_DOT,
-        // 4th row:
-        KC_DEL, OSM(MOD_LSFT), LT(1, KC_SPC),                                           LT(5, KC_SPC), OSL(2), KC_BSPC
-    ),
-    // Digits, Fns
-	[1] = LAYOUT(
-        // 1st row:
-        TO(0), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                              KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_NO, KC_ENT,
-        // 2nd row:
-        KC_LALT, KC_LGUI, KC_F4, TD(TD_F5), KC_F6, KC_F11,                              KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
-        // 3rd row:
-        KC_LCTL, KC_RALT, KC_F1, KC_F2, KC_F3, KC_F12,                                  KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NLCK,
-        // 4th row:
-        KC_DEL, OSM(MOD_LSFT), KC_NO,                                                   LT(5, KC_SPC), OSL(2), KC_BSPC
-    ),
-    // Wildcards
-    [2] = LAYOUT(
-        // 1st row:
-        TO(0), MACRO_TILD, MACRO_NUMBER, MACRO_AT, MACRO_DLR, MACRO_LBRACKET, MACRO_RBRACKET,               MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_ENT,
-        // 2nd row:
-        MACRO_GRAVE, MACRO_PRCNT, MACRO_QUES, MACRO_EXLM, MACRO_LPRN, MACRO_RPRN,                           MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
-        // 3rd row:
-        KC_NO, MACRO_HASH, MACRO_LT, MACRO_GT, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                        MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_CIRC, MACRO_COMMA, MACRO_DOT,
-        // 4th row:
-        KC_DEL, OSM(MOD_LSFT), LT(1, KC_SPC),                                                               MACRO_RU, MACRO_EN, KC_BSPC
-    ),
-    // Arrows
-    [3] = LAYOUT(
-        // 1st row:
-        TO(0), KC_NO, KC_NO, KC_NO, KC_TAB, TD(TD_LBRACKET), TD(TD_RBRACKET),           KC_NO, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO, KC_ENT,
-        // 2nd row:
-        KC_NO, KC_NO, KC_LGUI, KC_LCTL, KC_LALT, KC_BTN1,                               KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_NO,
-        // 3rd row:
-        KC_NO, KC_NO, KC_NO, KC_NO, MEH(KC_S), MEH(KC_F),                               KC_APP, KC_PGUP, KC_NO, KC_PGDN, KC_NO, KC_NO,
-        // 4th row:
-        KC_DEL, OSM(MOD_LSFT), LT(1, KC_SPC),                                           LT(5, KC_SPC), OSL(2), KC_BSPC
-    ),
-    // Mouse
-    [4] = LAYOUT(
-        // 1st row:
-        TO(0), KC_NO, KC_NO, KC_NO, KC_TAB, TD(TD_LBRACKET), TD(TD_RBRACKET),           KC_BTN5, KC_BTN1, KC_MS_U, KC_BTN2, KC_NO, KC_NO, KC_ENT,
-        // 2nd row:
-        KC_NO, KC_NO, KC_LGUI, KC_LCTL, KC_LALT, KC_BTN1,                               KC_BTN4, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_NO,
-        // 3rd row:
-        KC_NO, KC_NO, KC_NO, KC_NO, MEH(KC_S), MEH(KC_F),                               KC_APP, KC_WH_D, KC_BTN3, KC_WH_U, KC_NO, KC_NO,
-        // 4th row:
-        KC_DEL, OSM(MOD_LSFT), LT(1, KC_SPC),                                           LT(5, KC_SPC), OSL(2), KC_BSPC
-    ),
-    // OS
-	[5] = LAYOUT(
-        // 1st row:
-        TO(0), KC_NO, LGUI(KC_Q), KC_NO, LGUI(KC_W), LGUI(KC_R), TD(TD_T),              LGUI(KC_Y), TD(TD_U), KC_NO, LGUI(KC_O), LGUI(KC_P), KC_PSCR, LALT(LGUI(KC_Q)),
-        // 2nd row:
-        KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),              TD(TD_H), KC_NO, KC_NO, KC_NO, LGUI(KC_SCLN), KC_NO,
-        // 3rd row:
-        KC_NO, LGUI(KC_Z), KC_NO, LGUI(KC_X), LGUI(KC_V), KC_NO,                        KC_MPLY, MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), LGUI(KC_SLSH), MO(6),
-        // 4th row:
-        KC_MUTE, KC_VOLD, KC_VOLU,                                                      KC_NO, KC_MPRV, KC_MNXT
-    ),
-    // Game 1
-    [7] = LAYOUT(
-        // 1st row:
-        KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                   KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSLASH, TO(0),
-        // 2nd row:
-        KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                          KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
-        // 3rd row:
-        KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                          KC_N, KC_M, KC_COMM, KC_DOT, KC_LBRC, KC_RBRC,
-        // 4th row:
-        MO(8), KC_SPC, KC_ENT,                                                          KC_NO, MO(3), KC_NO
-    ),
-    // Game 2
-    [8] = LAYOUT(
-        // 1st row:
-        KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6,                                     KC_7, KC_8, KC_9, KC_0, KC_MINUS, KC_EQUAL, TO(0),
-        // 2nd row:
-        KC_CAPS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-        // 3rd row:
-        KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,                                       KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
-        // 4th row:
-        KC_NO, KC_SPC, KC_ENT,                                                          KC_NO, MO(3), KC_NO
-    ),
-    // Service
-	[6] = LAYOUT(
-        // 1st row:
-        TO(0), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-        // 2nd row:
-        KC_NO, KC_NO, TO(4), TO(5), KC_NO, KC_NO,                                       KC_NO, TO(7), TO(8), KC_NO, KC_NO, KC_NO,
-        // 3rd row:
-        KC_NO, KC_NO, TO(1), TO(2), TO(3), KC_NO,                                       KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
-        // 4th row:
-        KC_NO, KC_NO, KC_NO,                                                            KC_NO, KC_NO, MACRO_SWITCH_LANG
-    )
+[_MAIN] = LAYOUT(
+    // 1st row:
+    KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC, KC_ENT,
+    // 2nd row:
+    KC_LALT, LT(_ARROWS, KC_A), KC_S, KC_D, KC_F, KC_G,                                 KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+    // 3rd row:
+    KC_LCTL, LT(_MOUSE, KC_Z), KC_X, KC_C, KC_V, KC_B,                                  KC_N, TD(TD_SOFT_HARD), KC_COMM, KC_DOT, MACRO_COMMA, MACRO_DOT,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), LT(_DIGITS, KC_SPC),                                         LT(_OS, KC_SPC), OSL(_WILDS), KC_BSPC
+),
+[_DIGITS] = LAYOUT(
+    // 1st row:
+    TO(_MAIN), KC_TAB, KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                              KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_NO, KC_ENT,
+    // 2nd row:
+    KC_LALT, KC_LGUI, KC_F4, TD(TD_F5), KC_F6, KC_F11,                                  KC_PAST, KC_4, KC_5, KC_6, KC_PPLS, KC_LGUI,
+    // 3rd row:
+    KC_LCTL, KC_RALT, KC_F1, KC_F2, KC_F3, KC_F12,                                      KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_NLCK,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), KC_NO,                                                       LT(_OS, KC_SPC), OSL(_WILDS), KC_BSPC
+),
+[_WILDS] = LAYOUT( // Wildcards
+    // 1st row:
+    TO(_MAIN), MACRO_TILD, MACRO_NUMBER, MACRO_AT, MACRO_DLR, MACRO_LBRACKET, MACRO_RBRACKET,           MACRO_SLASH, MACRO_PIPE, MACRO_BSLASH, MACRO_LODASH, MACRO_MINUS, KC_NO, KC_ENT,
+    // 2nd row:
+    MACRO_GRAVE, MACRO_PRCNT, MACRO_QUES, MACRO_EXLM, MACRO_LPRN, MACRO_RPRN,                           MACRO_ASTRX, MACRO_QUOTE, MACRO_DQUOTE, MACRO_EQUAL, MACRO_PLUS, KC_NO,
+    // 3rd row:
+    KC_NO, MACRO_HASH, MACRO_LT, MACRO_GT, MACRO_LCRVBRACKET, MACRO_RCRVBRACKET,                        MACRO_AMPR, MACRO_SCOLON, MACRO_COLON, MACRO_CIRC, MACRO_COMMA, MACRO_DOT,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), LT(_DIGITS, KC_SPC),                                                         MACRO_RU, MACRO_EN, KC_BSPC
+),
+[_ARROWS] = LAYOUT(
+    // 1st row:
+    TO(_MAIN), KC_NO, KC_NO, KC_NO, KC_TAB, TD(TD_LBRACKET), TD(TD_RBRACKET),           KC_NO, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO, KC_ENT,
+    // 2nd row:
+    KC_NO, KC_NO, KC_LGUI, KC_LCTL, KC_LALT, KC_BTN1,                                   KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_NO,
+    // 3rd row:
+    KC_NO, KC_NO, KC_NO, KC_NO, MEH(KC_S), MEH(KC_F),                                   KC_APP, KC_PGUP, KC_NO, KC_PGDN, KC_NO, KC_NO,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), LT(_DIGITS, KC_SPC),                                         LT(_OS, KC_SPC), OSL(_WILDS), KC_BSPC
+),
+[_MOUSE] = LAYOUT(
+    // 1st row:
+    TO(_MAIN), KC_NO, KC_NO, KC_NO, KC_TAB, TD(TD_LBRACKET), TD(TD_RBRACKET),           KC_BTN5, KC_BTN1, KC_MS_U, KC_BTN2, KC_NO, KC_NO, KC_ENT,
+    // 2nd row:
+    KC_NO, KC_NO, KC_LGUI, KC_LCTL, KC_LALT, KC_BTN1,                                   KC_BTN4, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_NO,
+    // 3rd row:
+    KC_NO, KC_NO, OSL(_KEYNAV), KC_NO, MEH(KC_S), MEH(KC_F),                            KC_APP, KC_WH_D, KC_BTN3, KC_WH_U, KC_NO, KC_NO,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), LT(_DIGITS, KC_SPC),                                         LT(_OS, KC_SPC), OSL(_WILDS), KC_BSPC
+),
+[_KEYNAV] = LAYOUT(
+    // 1st row:
+    KC_ESC, KC_NO, KC_NO, KC_NO, KC_TAB, TD(TD_LBRACKET), TD(TD_RBRACKET),              KC_NO, KC_U, KC_I, KC_O, KC_NO, KC_NO, KC_ENT,
+    // 2nd row:
+    KC_NO, KC_NO, KC_LGUI, KC_LCTL, KC_LALT, KC_BTN1,                                   KC_NO, KC_J, KC_K, KC_L, TD(TD_SMCLN), KC_NO,
+    // 3rd row:
+    KC_NO, KC_NO, KC_NO, KC_NO, MEH(KC_S), MEH(KC_F),                                   KC_NO, KC_M, KC_COMM, KC_DOT, KC_NO, KC_NO,
+    // 4th row:
+    KC_DEL, OSM(MOD_LSFT), LT(_DIGITS, KC_SPC),                                         LT(_OS, KC_SPC), OSL(_WILDS), KC_BSPC
+),
+[_OS] = LAYOUT(
+    // 1st row:
+    TO(_MAIN), KC_NO, LGUI(KC_Q), KC_NO, LGUI(KC_W), LGUI(KC_R), TD(TD_T),              LGUI(KC_Y), TD(TD_U), KC_NO, LGUI(KC_O), LGUI(KC_P), KC_PSCR, LALT(LGUI(KC_Q)),
+    // 2nd row:
+    KC_NO, LGUI(KC_A), LGUI(KC_S), LGUI(KC_D), LGUI(KC_F), LGUI(KC_G),                  TD(TD_H), KC_NO, KC_NO, KC_NO, LGUI(KC_SCLN), KC_NO,
+    // 3rd row:
+    KC_NO, LGUI(KC_Z), KC_NO, LGUI(KC_X), LGUI(KC_V), KC_NO,                            KC_MPLY, MACRO_NOTIF, LGUI(KC_M), LGUI(KC_COMM), LGUI(KC_SLSH), MO(_SERVICE),
+    // 4th row:
+    KC_MUTE, KC_VOLD, KC_VOLU,                                                          KC_NO, KC_MPRV, KC_MNXT
+),
+[_GAME1] = LAYOUT(
+    // 1st row:
+    KC_ESC, KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_BSLASH, TO(_MAIN),
+    // 2nd row:
+    KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                              KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_QUOT,
+    // 3rd row:
+    KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                              KC_N, KC_M, KC_COMM, KC_DOT, KC_LBRC, KC_RBRC,
+    // 4th row:
+    MO(8), KC_SPC, KC_ENT,                                                              KC_NO, MO(_ARROWS), KC_NO
+),
+[_GAME2] = LAYOUT(
+    // 1st row:
+    KC_ESC, KC_1, KC_2, KC_3, KC_4, KC_5, KC_6,                                         KC_7, KC_8, KC_9, KC_0, KC_MINUS, KC_EQUAL, TO(_MAIN),
+    // 2nd row:
+    KC_CAPS, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                         KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    // 3rd row:
+    KC_F1, KC_F2, KC_F3, KC_F4, KC_F5, KC_F6,                                           KC_F7, KC_F8, KC_F9, KC_F10, KC_F11, KC_F12,
+    // 4th row:
+    KC_NO, KC_SPC, KC_ENT,                                                              KC_NO, MO(_ARROWS), KC_NO
+),
+[_SERVICE] = LAYOUT(
+    // 1st row:
+    TO(_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    // 2nd row:
+    KC_NO, KC_NO, TO(_MOUSE), TO(_OS), TO(_KEYNAV), KC_NO,                              KC_NO, TO(_GAME1), TO(_GAME2), KC_NO, KC_NO, KC_NO,
+    // 3rd row:
+    KC_NO, KC_NO, TO(_DIGITS), TO(_WILDS), TO(_ARROWS), KC_NO,                          KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    // 4th row:
+    KC_NO, KC_NO, KC_NO,                                                                KC_NO, KC_NO, MACRO_SWITCH_LANG
+)
 };
