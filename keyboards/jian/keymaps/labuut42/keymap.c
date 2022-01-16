@@ -1,14 +1,6 @@
 #include QMK_KEYBOARD_H
 
 
-int DELAY = 3;
-
-/*
-    0: false
-    1: true
-*/
-int IS_MOD_PRESSED = 0;
-
 /*
     0: EN
     1: RU
@@ -36,11 +28,9 @@ void switch_to_lang(int lang) {
     switch (LAYOUT_HOTKEY) {
         // Caps / Shift + Caps
         case 0:
-            if (is_ru) {
-                send_string(SS_TAP(X_CAPSLOCK));
-            } else {
-                send_string(SS_LSFT(SS_TAP(X_CAPSLOCK)));
-            }
+            if (is_ru) send_string(SS_TAP(X_CAPSLOCK));
+            if (!is_ru) send_string(SS_LSFT(SS_TAP(X_CAPSLOCK)));
+            break;
         // Shift + Alt
         case 1:
             send_string(SS_LSFT(SS_TAP(X_LALT)));
@@ -63,11 +53,11 @@ void send_one_string(char *one_tap_string) {
 
     if (is_ru) switch_to_lang(0); // to EN
 
-    send_string(SS_DELAY(DELAY));
+    send_string(SS_DELAY(3));
     send_string(one_tap_string);
 
     if (is_ru) {
-        send_string(SS_DELAY(DELAY));
+        send_string(SS_DELAY(3));
         switch_to_lang(1); // to RU
     }
 }
@@ -77,15 +67,15 @@ void send_two_strings(qk_tap_dance_state_t *state, char *one_tap_string, char *d
     if (is_ru) switch_to_lang(0); // to EN
 
     if (state->count == 1) {
-        send_string(SS_DELAY(DELAY));
+        send_string(SS_DELAY(3));
         send_string(one_tap_string);
     } else {
-        send_string(SS_DELAY(DELAY));
+        send_string(SS_DELAY(3));
         send_string(dbl_tap_string);
     }
 
     if (is_ru) {
-        send_string(SS_DELAY(DELAY));
+        send_string(SS_DELAY(3));
         switch_to_lang(1); // to RU
     }
 }
@@ -94,15 +84,13 @@ void send_two_strings(qk_tap_dance_state_t *state, char *one_tap_string, char *d
     action: 0 - need to register
     action: 1 - need to unregister
 */
-void toggle_mod(int key, int action) {
+void toggle_mod_state(int key, int action) {
     if (action == 0) {
         register_code16(key);
-        IS_MOD_PRESSED = 1;
         return;
     }
-    if ((action == 1) && (IS_MOD_PRESSED == 1)) {
+    if (action == 1) {
         unregister_code16(key);
-        IS_MOD_PRESSED = 0;
     }
 }
 
@@ -265,7 +253,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     // open notifications and move cursor to 'clear notifications'
     case MRS_NOTIF:
         if (record->event.pressed) {
-            SEND_STRING(SS_LGUI(SS_TAP(X_N)) SS_DELAY(DELAY) SS_LCTL(SS_LSFT(SS_LALT(SS_TAP(X_N)))));
+            SEND_STRING(SS_LGUI(SS_TAP(X_N)) SS_DELAY(3) SS_LCTL(SS_LSFT(SS_LALT(SS_TAP(X_N)))));
         }
         break;
     }
@@ -284,90 +272,90 @@ void slashes_finished(qk_tap_dance_state_t *state, void *user_data) {
 // ( ) Shift
 void prnts_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LSFT, 0);
+        toggle_mod_state(KC_LSFT, 0);
         return;
     }
     send_two_strings(state, "(", ")");
 }
 void prnts_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LSFT, 1);
+    toggle_mod_state(KC_LSFT, 1);
 }
 // { } Ctrl
 void crbrkts_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LCTL, 0);
+        toggle_mod_state(KC_LCTL, 0);
         return;
     }
     send_two_strings(state, "{", "}");
 }
 void crbrkts_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LCTL, 1);
+    toggle_mod_state(KC_LCTL, 1);
 }
 // [ ] Alt
 void brkts_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LALT, 0);
+        toggle_mod_state(KC_LALT, 0);
         return;
     }
     send_two_strings(state, "[", "]");
 }
 void brkts_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LALT, 1);
+    toggle_mod_state(KC_LALT, 1);
 }
 // ` Meta
 void grave_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LGUI, 0);
+        toggle_mod_state(KC_LGUI, 0);
         return;
     }
     send_one_string("`");
 }
 void grave_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LGUI, 1);
+    toggle_mod_state(KC_LGUI, 1);
 }
 // ' " Shift
 void quotes_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LSFT, 0);
+        toggle_mod_state(KC_LSFT, 0);
         return;
     }
     send_two_strings(state, "'", "\"");
 }
 void quotes_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LSFT, 1);
+    toggle_mod_state(KC_LSFT, 1);
 }
 // ; : Ctrl
 void colons_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LCTL, 0);
+        toggle_mod_state(KC_LCTL, 0);
         return;
     }
     send_two_strings(state, ";", ":");
 }
 void colons_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LCTL, 1);
+    toggle_mod_state(KC_LCTL, 1);
 }
 // = Alt
 void equal_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LALT, 0);
+        toggle_mod_state(KC_LALT, 0);
         return;
     }
     send_one_string("=");
 }
 void equal_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LALT, 1);
+    toggle_mod_state(KC_LALT, 1);
 }
 // + Meta
 void plus_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
-        toggle_mod(KC_LGUI, 0);
+        toggle_mod_state(KC_LGUI, 0);
         return;
     }
     send_one_string("+");
 }
 void plus_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod(KC_LGUI, 1);
+    toggle_mod_state(KC_LGUI, 1);
 }
 
 
@@ -409,7 +397,6 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     KC_NO,
     // 2nd row:
     KC_TAB, TD(GRAVE), TD(BRKTS), TD(CRBRKTS), TD(PRNTS), TD(LTGT),             MRS_ASTRX, TD(QUOTES), TD(COLONS), TD(EQUAL), TD(PLUS), KC_ENT,
-    // KC_TAB, MRS_GRAVE, TD(BRKTS), TD(CRBRKTS), TD(PRNTS), TD(LTGT),             MRS_ASTRX, TD(QUOTES), TD(COLONS), MRS_EQUAL, MRS_PLUS, KC_ENT,
     // 3rd row:
     KC_NO, MRS_AT, MRS_HASH, MRS_DLR, MRS_PRCNT, KC_NO,                         KC_NO, MRS_AMPR, MRS_PIPE, MRS_COMMA, MRS_DOT, KC_NO,
     // 4th row:
