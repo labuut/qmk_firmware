@@ -116,6 +116,10 @@ enum macros {
     MRS_RU = SAFE_RANGE,
     MRS_EN,
     MRS_SWITCH_LANG,
+    MRS_LANG_HOTKEY_0,
+    MRS_LANG_HOTKEY_1,
+    MRS_LANG_HOTKEY_2,
+    MRS_LANG_HOTKEY_3,
 
     // MRS_GRAVE,
     MRS_TILD,
@@ -143,28 +147,30 @@ enum macros {
 };
 
 enum tap_dances {
+    ESC_MAIN,
+
     RU_SOFT_HARD,
     RU_B_JU,
 
-    COLONS,
-    PRNTS,
-    BRKTS,
-    CRBRKTS,
-    QUOTES,
     LTGT,
     SLASHES,
-
+    PRNTS,
+    CRBRKTS,
+    BRKTS,
+    GRAVE,
+    QUOTES,
+    COLONS,
     EQUAL,
     PLUS,
-    GRAVE,
 };
 
 
 // Macro definitions
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     bool is_ru = CURRENT_LANG == 1;
-    // Language's layout macros
+
     switch (keycode) {
+    // Language's layout macros
     case MRS_RU:
         if (record->event.pressed) switch_to_lang(1); // to EN
         break;
@@ -176,6 +182,18 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) {
             CURRENT_LANG = (CURRENT_LANG == 0) ? 1 : 0;
         }
+        break;
+    case MRS_LANG_HOTKEY_0:
+        if (record->event.pressed) toggle_layout_hotkey(0); // Caps / Shift + Caps
+        break;
+    case MRS_LANG_HOTKEY_1:
+        if (record->event.pressed) toggle_layout_hotkey(1); // Shift + Alt
+        break;
+    case MRS_LANG_HOTKEY_2:
+        if (record->event.pressed) toggle_layout_hotkey(2); // Alt + Space
+        break;
+    case MRS_LANG_HOTKEY_3:
+        if (record->event.pressed) toggle_layout_hotkey(3); // Ctrl + SHift
         break;
 
     // Wildcards macros
@@ -308,6 +326,10 @@ void grave_finished(qk_tap_dance_state_t *state, void *user_data) {
         toggle_mod_state(KC_LGUI, 0);
         return;
     }
+    if (state->count == 3) {
+        send_one_string("```");
+        return;
+    }
     send_one_string("`");
 }
 void grave_reset(qk_tap_dance_state_t *state, void *user_data) {
@@ -361,19 +383,21 @@ void plus_reset(qk_tap_dance_state_t *state, void *user_data) {
 
 // Tap dance definitions
 qk_tap_dance_action_t tap_dance_actions[] = {
-    [RU_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),                        // Ь / Ъ
-    [RU_B_JU] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_DOT),                           // Б / Ю
+    [ESC_MAIN] = ACTION_TAP_DANCE_LAYER_MOVE(KC_ESC, LR_MAIN),                          // Esc / LR_MAIN
 
-    [PRNTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, prnts_finished, prnts_reset),
-    [CRBRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, crbrkts_finished, crbrkts_reset),
-    [BRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, brkts_finished, brkts_reset),
-    [LTGT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ltgt_finished, NULL),
-    [QUOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quotes_finished, quotes_reset),
-    [COLONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, colons_finished, colons_reset),
-    [SLASHES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, slashes_finished, NULL),
-    [EQUAL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, equal_finished, equal_reset),
-    [PLUS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, plus_finished, plus_reset),
-    [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, grave_finished, grave_reset),
+    [RU_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),                            // Ь / Ъ
+    [RU_B_JU] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_DOT),                               // Б / Ю
+
+    [LTGT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ltgt_finished, NULL),                   // < >
+    [SLASHES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, slashes_finished, NULL),             // '/ \'
+    [PRNTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, prnts_finished, prnts_reset),          // ( ) / Shift
+    [CRBRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, crbrkts_finished, crbrkts_reset),    // { } / Ctrl
+    [BRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, brkts_finished, brkts_reset),          // [ ] / Alt
+    [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, grave_finished, grave_reset),          // ` / Meta
+    [QUOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quotes_finished, quotes_reset),       // ' " / Shift
+    [COLONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, colons_finished, colons_reset),       // ; : / Ctrl
+    [EQUAL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, equal_finished, equal_reset),          // = / Alt
+    [PLUS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, plus_finished, plus_reset),             // + / Meta
 };
 
 // Keymaps
@@ -393,7 +417,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_WILDS] = LAYOUT( // Wildcards
     // 1st row:
     KC_NO,
-    TO(LR_MAIN), MRS_TILD, MRS_CIRC, KC_NO, KC_NO, KC_NO,                       TD(SLASHES), MRS_EXLM, MRS_QUES, MRS_LODASH, MRS_MINUS, KC_NO,
+    TD(ESC_MAIN), MRS_TILD, MRS_CIRC, KC_NO, KC_NO, KC_NO,                      TD(SLASHES), MRS_EXLM, MRS_QUES, MRS_LODASH, MRS_MINUS, KC_NO,
     KC_NO,
     // 2nd row:
     KC_TAB, TD(GRAVE), TD(BRKTS), TD(CRBRKTS), TD(PRNTS), TD(LTGT),             MRS_ASTRX, TD(QUOTES), TD(COLONS), TD(EQUAL), TD(PLUS), KC_ENT,
@@ -405,7 +429,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_NUMS] = LAYOUT(
     // 1st row:
     KC_NO,
-    TO(LR_MAIN), KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                            KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_NLCK,
+    TD(ESC_MAIN), KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                           KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_NLCK,
     KC_NO,
     // 2nd row:
     KC_TAB, KC_LGUI, ALT_T(KC_F4), CTL_T(KC_F5), SFT_T(KC_F6), KC_F11,          KC_PAST, SFT_T(KC_4), CTL_T(KC_5), ALT_T(KC_6), GUI_T(KC_PPLS), KC_ENT,
@@ -417,7 +441,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_MOUSE] = LAYOUT(
     // 1st row:
     KC_NO,
-    TO(LR_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                             KC_BTN5, KC_BTN1, KC_MS_U, KC_BTN2, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_BTN5, KC_BTN1, KC_MS_U, KC_BTN2, KC_NO, KC_NO,
     KC_NO,
     // 2nd row:
     KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_BTN4, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_ENT,
@@ -429,7 +453,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_ARROWS] = LAYOUT(
     // 1st row:
     KC_NO,
-    TO(LR_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                             KC_NO, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO,
     KC_NO,
     // 2nd row:
     KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_ENT,
@@ -441,12 +465,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_SERVICE] = LAYOUT(
     // 1st row:
     KC_NO,
-    TO(LR_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, MRS_RU_YO,                         RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, MRS_RU_YO,                        RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO,
     // 2nd row:
     KC_NO, KC_NO, KC_NO, KC_NO, TO(LR_GAME1), KC_NO,                            MRS_SWITCH_LANG, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, MRS_RU_NUM, KC_NO, KC_NO,                              KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_NO, MRS_RU_NUM, KC_NO, KC_NO, KC_NO,                              KC_NO, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
     // 4th row:
     KC_MUTE, KC_VOLD, KC_VOLU,                                                  KC_MPLY, KC_MPRV, KC_MNXT
 ),
