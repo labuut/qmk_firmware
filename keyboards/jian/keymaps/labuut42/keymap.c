@@ -11,7 +11,7 @@ int CURRENT_LANG = 0;
     0: Caps / Shift + Caps
     1: Shift + Alt
     2: Alt + Space
-    3: Ctrl + SHift
+    3: Ctrl + Shift
 */
 int LAYOUT_HOTKEY = 0;
 
@@ -193,7 +193,7 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         if (record->event.pressed) toggle_layout_hotkey(2); // Alt + Space
         break;
     case MRS_LANG_HOTKEY_3:
-        if (record->event.pressed) toggle_layout_hotkey(3); // Ctrl + SHift
+        if (record->event.pressed) toggle_layout_hotkey(3); // Ctrl + Shift
         break;
 
     // Wildcards macros
@@ -405,10 +405,10 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_MAIN] = LAYOUT(
     // 1st row:
     KC_NO,
-    KC_ESC, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, LT(LR_SERVICE, KC_LBRC),
+    KC_ESC, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC,
     KC_NO,
     // 2nd row:
-    KC_TAB, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), KC_ENT,
+    KC_TAB, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), LT(LR_SERVICE, KC_ENT),
     // 3rd row:
     KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), MRS_COMMA, MRS_DOT, KC_QUOT,
     // 4th row:
@@ -465,7 +465,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_SERVICE] = LAYOUT(
     // 1st row:
     KC_NO,
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, MRS_RU_YO,                        RESET, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, MRS_RU_YO,                        RESET, KC_PSCR, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO,
     // 2nd row:
     KC_NO, KC_NO, KC_NO, KC_NO, TO(LR_GAME1), KC_NO,                            MRS_SWITCH_LANG, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
