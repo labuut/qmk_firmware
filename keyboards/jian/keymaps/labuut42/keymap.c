@@ -121,8 +121,8 @@ enum macros {
     MRS_LANG_HOTKEY_2,
     MRS_LANG_HOTKEY_3,
 
-    // MRS_GRAVE,
-    MRS_TILD,
+    MRS_GRAVE,
+    // MRS_TILD,
     MRS_EXLM,
     MRS_QUES,
     MRS_AMPR,
@@ -131,8 +131,8 @@ enum macros {
     // MRS_PLUS,
     MRS_MINUS,
     MRS_LODASH,
-    MRS_COMMA,
-    MRS_DOT,
+    // MRS_COMMA,
+    // MRS_DOT,
     MRS_AT,
     MRS_HASH,
     MRS_DLR,
@@ -152,14 +152,16 @@ enum tap_dances {
     RU_SOFT_HARD,
     RU_B_JU,
 
-    LTGT,
+    DOTS,
+    COMMAS,
+    COMDOT,
     SLASHES,
-    PRNTS,
     CRBRKTS,
     BRKTS,
-    GRAVE,
     QUOTES,
-    COLONS,
+    TILD,
+    PRNTS,
+    LTGT,
     EQUAL,
     PLUS,
 };
@@ -197,12 +199,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
         break;
 
     // Wildcards macros
-    // case MRS_GRAVE: // `
-    //     if (record->event.pressed) send_one_string("`");
-    //     break;
-    case MRS_TILD: // ~
-        if (record->event.pressed) send_one_string("~");
+    case MRS_GRAVE: // `
+        if (record->event.pressed) send_one_string("`");
         break;
+    // case MRS_TILD: // ~
+    //     if (record->event.pressed) send_one_string("~");
+    //     break;
     case MRS_EXLM: // !
         if (record->event.pressed) send_one_string("!");
         break;
@@ -227,12 +229,12 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     case MRS_LODASH: // _
         if (record->event.pressed) send_one_string("_");
         break;
-    case MRS_COMMA: // ,
-        if (record->event.pressed) send_one_string(",");
-        break;
-    case MRS_DOT: // .
-        if (record->event.pressed) send_one_string(".");
-        break;
+    // case MRS_COMMA: // ,
+    //     if (record->event.pressed) send_one_string(",");
+    //     break;
+    // case MRS_DOT: // .
+    //     if (record->event.pressed) send_one_string(".");
+    //     break;
     case MRS_AT: // @
         if (record->event.pressed) send_one_string("@");
         break;
@@ -279,15 +281,69 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// < >
-void ltgt_finished(qk_tap_dance_state_t *state, void *user_data) {
-    send_two_strings(state, "<", ">");
+// . :
+void dots_finished(qk_tap_dance_state_t *state, void *user_data) {
+    send_two_strings(state, ".", ":");
+}
+// , ;
+void commas_finished(qk_tap_dance_state_t *state, void *user_data) {
+    send_two_strings(state, ",", ";");
+}
+// , .
+void comdot_finished(qk_tap_dance_state_t *state, void *user_data) {
+    send_two_strings(state, ",", ".");
 }
 // "/ \"
 void slashes_finished(qk_tap_dance_state_t *state, void *user_data) {
     send_two_strings(state, "/", "\\");
 }
-// ( ) Shift
+// left modifiers:
+// { } / Shift
+void crbrkts_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (is_key_holded(state)) {
+        toggle_mod_state(KC_LSFT, 0);
+        return;
+    }
+    send_two_strings(state, "{", "}");
+}
+void crbrkts_reset(qk_tap_dance_state_t *state, void *user_data) {
+    toggle_mod_state(KC_LSFT, 1);
+}
+// [ ] / Ctrl
+void brkts_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (is_key_holded(state)) {
+        toggle_mod_state(KC_LCTL, 0);
+        return;
+    }
+    send_two_strings(state, "[", "]");
+}
+void brkts_reset(qk_tap_dance_state_t *state, void *user_data) {
+    toggle_mod_state(KC_LCTL, 1);
+}
+// ' " / Alt
+void quotes_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (is_key_holded(state)) {
+        toggle_mod_state(KC_LALT, 0);
+        return;
+    }
+    send_two_strings(state, "'", "\"");
+}
+void quotes_reset(qk_tap_dance_state_t *state, void *user_data) {
+    toggle_mod_state(KC_LALT, 1);
+}
+// ~ / Meta
+void tild_finished(qk_tap_dance_state_t *state, void *user_data) {
+    if (is_key_holded(state)) {
+        toggle_mod_state(KC_LGUI, 0);
+        return;
+    }
+    send_one_string("~");
+}
+void tild_reset(qk_tap_dance_state_t *state, void *user_data) {
+    toggle_mod_state(KC_LGUI, 1);
+}
+// right modifiers:
+// ( ) / Shift
 void prnts_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
         toggle_mod_state(KC_LSFT, 0);
@@ -298,66 +354,18 @@ void prnts_finished(qk_tap_dance_state_t *state, void *user_data) {
 void prnts_reset(qk_tap_dance_state_t *state, void *user_data) {
     toggle_mod_state(KC_LSFT, 1);
 }
-// { } Ctrl
-void crbrkts_finished(qk_tap_dance_state_t *state, void *user_data) {
+// < > / Ctrl
+void ltgt_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
         toggle_mod_state(KC_LCTL, 0);
         return;
     }
-    send_two_strings(state, "{", "}");
+    send_two_strings(state, "<", ">");
 }
-void crbrkts_reset(qk_tap_dance_state_t *state, void *user_data) {
+void ltgt_reset(qk_tap_dance_state_t *state, void *user_data) {
     toggle_mod_state(KC_LCTL, 1);
 }
-// [ ] Alt
-void brkts_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
-        toggle_mod_state(KC_LALT, 0);
-        return;
-    }
-    send_two_strings(state, "[", "]");
-}
-void brkts_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod_state(KC_LALT, 1);
-}
-// ` Meta
-void grave_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
-        toggle_mod_state(KC_LGUI, 0);
-        return;
-    }
-    if (state->count == 3) {
-        send_one_string("```");
-        return;
-    }
-    send_one_string("`");
-}
-void grave_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod_state(KC_LGUI, 1);
-}
-// ' " Shift
-void quotes_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
-        toggle_mod_state(KC_LSFT, 0);
-        return;
-    }
-    send_two_strings(state, "'", "\"");
-}
-void quotes_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod_state(KC_LSFT, 1);
-}
-// ; : Ctrl
-void colons_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
-        toggle_mod_state(KC_LCTL, 0);
-        return;
-    }
-    send_two_strings(state, ";", ":");
-}
-void colons_reset(qk_tap_dance_state_t *state, void *user_data) {
-    toggle_mod_state(KC_LCTL, 1);
-}
-// = Alt
+// = / Alt
 void equal_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
         toggle_mod_state(KC_LALT, 0);
@@ -368,7 +376,7 @@ void equal_finished(qk_tap_dance_state_t *state, void *user_data) {
 void equal_reset(qk_tap_dance_state_t *state, void *user_data) {
     toggle_mod_state(KC_LALT, 1);
 }
-// + Meta
+// + / Meta
 void plus_finished(qk_tap_dance_state_t *state, void *user_data) {
     if (is_key_holded(state)) {
         toggle_mod_state(KC_LGUI, 0);
@@ -388,16 +396,20 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [RU_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),                            // Ь / Ъ
     [RU_B_JU] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_DOT),                               // Б / Ю
 
-    [LTGT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ltgt_finished, NULL),                   // < >
+    [DOTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dots_finished, NULL),                   // . :
+    [COMMAS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, commas_finished, NULL),               // , ;
+    [COMDOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, comdot_finished, NULL),               // , .
     [SLASHES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, slashes_finished, NULL),             // '/ \'
+
+    [CRBRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, crbrkts_finished, crbrkts_reset),    // { } / Shift
+    [BRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, brkts_finished, brkts_reset),          // [ ] / Ctrl
+    [QUOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quotes_finished, quotes_reset),       // ' " / Alt
+    [TILD] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, tild_finished, tild_reset),             // ~   / Meta
+
     [PRNTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, prnts_finished, prnts_reset),          // ( ) / Shift
-    [CRBRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, crbrkts_finished, crbrkts_reset),    // { } / Ctrl
-    [BRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, brkts_finished, brkts_reset),          // [ ] / Alt
-    [GRAVE] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, grave_finished, grave_reset),          // ` / Meta
-    [QUOTES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, quotes_finished, quotes_reset),       // ' " / Shift
-    [COLONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, colons_finished, colons_reset),       // ; : / Ctrl
-    [EQUAL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, equal_finished, equal_reset),          // = / Alt
-    [PLUS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, plus_finished, plus_reset),             // + / Meta
+    [LTGT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, ltgt_finished, NULL),                   // < > / Ctrl
+    [EQUAL] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, equal_finished, equal_reset),          // =   / Alt
+    [PLUS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, plus_finished, plus_reset),             // +   / Meta
 };
 
 // Keymaps
@@ -410,19 +422,19 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_TAB, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), LT(LR_SERVICE, KC_ENT),
     // 3rd row:
-    KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), MRS_COMMA, MRS_DOT, KC_QUOT,
+    KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), TD(COMMAS), TD(DOTS), KC_QUOT,
     // 4th row:
     KC_DEL, LT(LR_ARROWS, KC_SPC), MO(LR_MOUSE),                                OSL(LR_WILDS), LT(LR_NUMS, KC_SPC), KC_BSPC
 ),
 [LR_WILDS] = LAYOUT( // Wildcards
     // 1st row:
     KC_NO,
-    TD(ESC_MAIN), MRS_TILD, MRS_CIRC, KC_NO, KC_NO, KC_NO,                      TD(SLASHES), MRS_EXLM, MRS_QUES, MRS_LODASH, MRS_MINUS, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, MRS_HASH, MRS_DLR, KC_NO,                       TD(SLASHES), MRS_PRCNT, MRS_AT, MRS_LODASH, MRS_MINUS, KC_NO,
     KC_NO,
     // 2nd row:
-    KC_TAB, TD(GRAVE), TD(BRKTS), TD(CRBRKTS), TD(PRNTS), TD(LTGT),             MRS_ASTRX, TD(QUOTES), TD(COLONS), TD(EQUAL), TD(PLUS), KC_ENT,
+    KC_TAB, TD(TILD), TD(QUOTES), TD(BRKTS), TD(CRBRKTS), MRS_GRAVE,            MRS_ASTRX, TD(PRNTS), TD(LTGT), TD(EQUAL), TD(PLUS), KC_ENT,
     // 3rd row:
-    KC_NO, MRS_AT, MRS_HASH, MRS_DLR, MRS_PRCNT, KC_NO,                         KC_NO, MRS_AMPR, MRS_PIPE, MRS_COMMA, MRS_DOT, KC_NO,
+    KC_NO, KC_NO, KC_NO, MRS_EXLM, MRS_QUES, KC_NO,                             MRS_CIRC, MRS_AMPR, MRS_PIPE, TD(COMMAS), TD(DOTS), KC_NO,
     // 4th row:
     KC_DEL, LT(LR_ARROWS, KC_SPC), MO(LR_MOUSE),                                MRS_EN, MRS_RU, KC_BSPC
 ),
@@ -434,7 +446,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_TAB, KC_LGUI, ALT_T(KC_F4), CTL_T(KC_F5), SFT_T(KC_F6), KC_F11,          KC_PAST, SFT_T(KC_4), CTL_T(KC_5), ALT_T(KC_6), GUI_T(KC_PPLS), KC_ENT,
     // 3rd row:
-    KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                  KC_0, KC_1, KC_2, KC_3, KC_PDOT, KC_ALGR,
+    KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                  KC_0, KC_1, KC_2, KC_3, TD(COMDOT), KC_ALGR,
     // 4th row:
     KC_DEL, LT(LR_ARROWS, KC_SPC), MO(LR_MOUSE),                                OSL(LR_WILDS), KC_NO, KC_BSPC
 ),
@@ -465,12 +477,12 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 [LR_SERVICE] = LAYOUT(
     // 1st row:
     KC_NO,
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, MRS_RU_YO,                        RESET, KC_PSCR, KC_NO, KC_NO, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, MRS_RU_NUM, KC_NO, MRS_RU_YO,                   RESET, KC_PSCR, KC_NO, KC_NO, KC_NO, KC_NO,
     KC_NO,
     // 2nd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, TO(LR_GAME1), KC_NO,                            MRS_SWITCH_LANG, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,                           MRS_SWITCH_LANG, TO(LR_GAME1), KC_NO, KC_NO, KC_NO, KC_NO,
     // 3rd row:
-    KC_NO, KC_NO, MRS_RU_NUM, KC_NO, KC_NO, KC_NO,                              KC_NO, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_NO, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
     // 4th row:
     KC_MUTE, KC_VOLD, KC_VOLU,                                                  KC_MPLY, KC_MPRV, KC_MNXT
 ),
@@ -482,7 +494,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                      KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_ENT,
     // 3rd row:
-    KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_SLSH, MRS_COMMA, MRS_DOT, TO(LR_MAIN),
+    KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_SLSH, TD(COMMAS), TD(DOTS), TO(LR_MAIN),
     // 4th row:
     TO(LR_GAME2), KC_SPC, KC_LALT,                                              KC_LALT, KC_SPC, KC_BSPC
 ),
