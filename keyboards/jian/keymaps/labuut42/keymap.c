@@ -152,9 +152,8 @@ enum tap_dances {
     RU_SOFT_HARD,
     RU_B_JU,
 
-    DOTS,
-    COMMAS,
     COMDOT,
+    COLONS,
     SLASHES,
     CRBRKTS,
     BRKTS,
@@ -281,17 +280,13 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
     return true;
 }
 
-// . :
-void dots_finished(qk_tap_dance_state_t *state, void *user_data) {
-    send_two_strings(state, ".", ":");
-}
-// , ;
-void commas_finished(qk_tap_dance_state_t *state, void *user_data) {
-    send_two_strings(state, ",", ";");
-}
 // , .
 void comdot_finished(qk_tap_dance_state_t *state, void *user_data) {
     send_two_strings(state, ",", ".");
+}
+// ; :
+void colons_finished(qk_tap_dance_state_t *state, void *user_data) {
+    send_two_strings(state, ";", ":");
 }
 // "/ \"
 void slashes_finished(qk_tap_dance_state_t *state, void *user_data) {
@@ -396,9 +391,8 @@ qk_tap_dance_action_t tap_dance_actions[] = {
     [RU_SOFT_HARD] = ACTION_TAP_DANCE_DOUBLE(KC_M, KC_RBRC),                            // Ь / Ъ
     [RU_B_JU] = ACTION_TAP_DANCE_DOUBLE(KC_COMM, KC_DOT),                               // Б / Ю
 
-    [DOTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, dots_finished, NULL),                   // . :
-    [COMMAS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, commas_finished, NULL),               // , ;
     [COMDOT] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, comdot_finished, NULL),               // , .
+    [COLONS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, colons_finished, NULL),               // ; :
     [SLASHES] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, slashes_finished, NULL),             // '/ \'
 
     [CRBRKTS] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, crbrkts_finished, crbrkts_reset),    // { } / Shift
@@ -422,11 +416,11 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_TAB, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), LT(LR_SERVICE, KC_ENT),
     // 3rd row:
-    KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), TD(COMMAS), TD(DOTS), KC_QUOT,
+    KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), TD(COLONS), TD(COMDOT), KC_QUOT,
     // 4th row:
     KC_DEL, LT(LR_ARROWS, KC_SPC), MO(LR_MOUSE),                                OSL(LR_WILDS), LT(LR_NUMS, KC_SPC), KC_BSPC
 ),
-[LR_WILDS] = LAYOUT( // Wildcards
+[LR_WILDS] = LAYOUT(
     // 1st row:
     KC_NO,
     TD(ESC_MAIN), KC_NO, KC_NO, MRS_HASH, MRS_DLR, KC_NO,                       TD(SLASHES), MRS_PRCNT, MRS_AT, MRS_LODASH, MRS_MINUS, KC_NO,
@@ -434,7 +428,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_TAB, TD(TILD), TD(QUOTES), TD(BRKTS), TD(CRBRKTS), MRS_GRAVE,            MRS_ASTRX, TD(PRNTS), TD(LTGT), TD(EQUAL), TD(PLUS), KC_ENT,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, MRS_EXLM, MRS_QUES, KC_NO,                             MRS_CIRC, MRS_AMPR, MRS_PIPE, TD(COMMAS), TD(DOTS), KC_NO,
+    KC_NO, KC_NO, KC_NO, MRS_EXLM, MRS_QUES, KC_NO,                             MRS_CIRC, MRS_AMPR, MRS_PIPE, TD(COLONS), TD(COMDOT), KC_NO,
     // 4th row:
     KC_DEL, LT(LR_ARROWS, KC_SPC), MO(LR_MOUSE),                                MRS_EN, MRS_RU, KC_BSPC
 ),
@@ -494,7 +488,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 2nd row:
     KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                      KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_ENT,
     // 3rd row:
-    KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_SLSH, TD(COMMAS), TD(DOTS), TO(LR_MAIN),
+    KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_SLSH, TD(COLONS), TD(COMDOT), TO(LR_MAIN),
     // 4th row:
     TO(LR_GAME2), KC_SPC, KC_LALT,                                              KC_LALT, KC_SPC, KC_BSPC
 ),
