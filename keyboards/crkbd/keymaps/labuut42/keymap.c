@@ -441,21 +441,21 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 ),
 [LR_MOUSE] = LAYOUT_split_3x6_3(
     // 1st row:
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_APP, KC_BTN4, KC_MS_U, KC_BTN5, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_BTN1, KC_BTN3, KC_BTN2, KC_NO, KC_NO,
     // 2nd row:
-    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_NO, KC_ENT,
+    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_ENT,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_WH_U, KC_BTN1, KC_BTN3, KC_BTN2, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_WH_U, KC_BTN4, KC_BTN5, KC_APP, KC_NO, KC_NO,
     // 4th row:
     KC_DEL, KC_NO, LT(LR_ARROWS, KC_SPC),                                       LT(LR_NUMS, KC_SPC), OSL(LR_WILDS), KC_BSPC
 ),
 [LR_ARROWS] = LAYOUT_split_3x6_3(
     // 1st row:
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_APP, KC_NO, KC_UP, KC_NO, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_HOME, KC_NO, KC_END, KC_NO, KC_NO,
     // 2nd row:
-    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_PGUP, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_ENT,
+    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_PGUP, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_ENT,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_PGDN, KC_HOME, KC_NO, KC_END, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_PGDN,  KC_NO, KC_NO, KC_APP, KC_NO, KC_NO,
     // 4th row:
     KC_DEL, MO(LR_MOUSE), KC_NO,                                                LT(LR_NUMS, KC_SPC), OSL(LR_WILDS), KC_BSPC
 ),
@@ -463,9 +463,9 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 1st row:
     TD(ESC_MAIN), KC_NO, KC_NO, MRS_RU_NUM, KC_NO, MRS_RU_YO,                   RESET, KC_PSCR, KC_NO, KC_NO, KC_NO, KC_NO,
     // 2nd row:
-    KC_NO, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,                           MRS_SWITCH_LANG, TO(LR_GAME1), KC_NO, KC_NO, KC_NO, KC_NO,
+    KC_NO, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_NO,                           KC_NO, TO(LR_GAME1), KC_NO, KC_NO, KC_NO, KC_NO,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_NO, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   MRS_SWITCH_LANG, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
     // 4th row:
     KC_MUTE, KC_VOLD, KC_VOLU,                                                  KC_MPLY, KC_MPRV, KC_MNXT
 ),
