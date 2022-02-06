@@ -95,7 +95,7 @@ void toggle_mod_state(int key, int action) {
     }
 }
 
-bool is_key_holded(qk_tap_dance_state_t *state) {
+bool is_key_held(qk_tap_dance_state_t *state) {
     if ((state->count == 1) && !(state->interrupted || !state->pressed)) return true;
 
     return false;
@@ -296,7 +296,7 @@ void slashes_finished(qk_tap_dance_state_t *state, void *user_data) {
 // left modifiers:
 // { } / Shift
 void crbrkts_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LSFT, 0);
         return;
     }
@@ -307,7 +307,7 @@ void crbrkts_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // [ ] / Ctrl
 void brkts_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LCTL, 0);
         return;
     }
@@ -318,7 +318,7 @@ void brkts_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // ' " / Alt
 void quotes_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LALT, 0);
         return;
     }
@@ -329,7 +329,7 @@ void quotes_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // ~ / Meta
 void tild_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LGUI, 0);
         return;
     }
@@ -341,7 +341,7 @@ void tild_reset(qk_tap_dance_state_t *state, void *user_data) {
 // right modifiers:
 // ( ) / Shift
 void prnts_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LSFT, 0);
         return;
     }
@@ -352,7 +352,7 @@ void prnts_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // < > / Ctrl
 void ltgt_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LCTL, 0);
         return;
     }
@@ -363,7 +363,7 @@ void ltgt_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // = / Alt
 void equal_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LALT, 0);
         return;
     }
@@ -374,7 +374,7 @@ void equal_reset(qk_tap_dance_state_t *state, void *user_data) {
 }
 // + / Meta
 void plus_finished(qk_tap_dance_state_t *state, void *user_data) {
-    if (is_key_holded(state)) {
+    if (is_key_held(state)) {
         toggle_mod_state(KC_LGUI, 0);
         return;
     }
@@ -413,51 +413,51 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 1st row:
     KC_ESC, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_LBRC,
     // 2nd row:
-    KC_TAB, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), LT(LR_SERVICE, KC_ENT),
+    KC_DEL, GUI_T(KC_A), ALT_T(KC_S), CTL_T(KC_D), SFT_T(KC_F), KC_G,           KC_H, SFT_T(KC_J), CTL_T(KC_K), ALT_T(KC_L), GUI_T(KC_SCLN), KC_BSPC,
     // 3rd row:
-    KC_NO, KC_Z, KC_X, KC_C, KC_V, KC_B,                                        KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), TD(COLONS), TD(COMDOT), KC_QUOT,
+    MO(LR_SERVICE), KC_Z, KC_X, KC_C, KC_V, KC_B,                               KC_N, TD(RU_SOFT_HARD), TD(RU_B_JU), TD(COLONS), TD(COMDOT), KC_QUOT,
     // 4th row:
-    KC_DEL, MO(LR_MOUSE), LT(LR_ARROWS, KC_SPC),                                LT(LR_NUMS, KC_SPC), OSL(LR_WILDS), KC_BSPC
+    KC_NO, LT(LR_NUMS, KC_TAB), LT(LR_MOUSE, KC_SPC),                           LT(LR_ARROWS, KC_SPC), LT(LR_WILDS, KC_ENT), OSL(LR_WILDS)
 ),
 [LR_WILDS] = LAYOUT_split_3x6_3(
     // 1st row:
     TD(ESC_MAIN), KC_NO, KC_NO, MRS_HASH, MRS_DLR, KC_NO,                       TD(SLASHES), MRS_PRCNT, MRS_AT, MRS_LODASH, MRS_MINUS, KC_NO,
     // 2nd row:
-    KC_TAB, TD(TILD), TD(QUOTES), TD(BRKTS), TD(CRBRKTS), MRS_GRAVE,            MRS_ASTRX, TD(PRNTS), TD(LTGT), TD(EQUAL), TD(PLUS), KC_ENT,
+    KC_DEL, TD(TILD), TD(QUOTES), TD(BRKTS), TD(CRBRKTS), MRS_GRAVE,            MRS_ASTRX, TD(PRNTS), TD(LTGT), TD(EQUAL), TD(PLUS), KC_BSPC,
     // 3rd row:
     KC_NO, KC_NO, KC_NO, MRS_EXLM, MRS_QUES, KC_NO,                             MRS_CIRC, MRS_AMPR, MRS_PIPE, TD(COLONS), TD(COMDOT), KC_NO,
     // 4th row:
-    KC_DEL, MO(LR_MOUSE), LT(LR_ARROWS, KC_SPC),                                MRS_RU, MRS_EN, KC_BSPC
+    KC_NO, LT(LR_NUMS, KC_TAB), LT(LR_MOUSE, KC_SPC),                           LT(LR_ARROWS, KC_SPC), MRS_RU, MRS_EN
 ),
 [LR_NUMS] = LAYOUT_split_3x6_3(
     // 1st row:
     TD(ESC_MAIN), KC_NO, KC_F7, KC_F8, KC_F9, KC_F10,                           KC_PSLS, KC_7, KC_8, KC_9, KC_PMNS, KC_NLCK,
     // 2nd row:
-    KC_TAB, KC_LGUI, ALT_T(KC_F4), CTL_T(KC_F5), SFT_T(KC_F6), KC_F11,          KC_PAST, SFT_T(KC_4), CTL_T(KC_5), ALT_T(KC_6), GUI_T(KC_PPLS), KC_ENT,
+    KC_DEL, KC_LGUI, ALT_T(KC_F4), CTL_T(KC_F5), SFT_T(KC_F6), KC_F11,          KC_PAST, SFT_T(KC_4), CTL_T(KC_5), ALT_T(KC_6), GUI_T(KC_PPLS), KC_BSPC,
     // 3rd row:
-    KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                  KC_0, KC_1, KC_2, KC_3, TD(COMDOT), KC_ALGR,
+    KC_NO, KC_NO, KC_F1, KC_F2, KC_F3, KC_F12,                                  KC_NO, KC_1, KC_2, KC_3, TD(COMDOT), KC_ALGR,
     // 4th row:
-    KC_DEL, MO(LR_MOUSE), LT(LR_ARROWS, KC_SPC),                                KC_NO, OSL(LR_WILDS), KC_BSPC
+    KC_NO, KC_NO, LT(LR_MOUSE, KC_SPC),                                         LT(LR_ARROWS, KC_SPC), LT(LR_WILDS, KC_ENT), KC_0
 ),
 [LR_MOUSE] = LAYOUT_split_3x6_3(
     // 1st row:
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_BTN1, KC_BTN3, KC_BTN2, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_WH_U, KC_BTN1, KC_MS_U, KC_BTN2, KC_BTN5, KC_NO,
     // 2nd row:
-    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_U, KC_MS_R, KC_ENT,
+    KC_DEL, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_WH_D, KC_MS_L, KC_MS_D, KC_MS_R, KC_BTN4, KC_BSPC,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_WH_U, KC_BTN4, KC_BTN5, KC_APP, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_NO, KC_NO, KC_BTN3, KC_NO, KC_APP, KC_NO,
     // 4th row:
-    KC_DEL, KC_NO, LT(LR_ARROWS, KC_SPC),                                       LT(LR_NUMS, KC_SPC), OSL(LR_WILDS), KC_BSPC
+    KC_NO, LT(LR_NUMS, KC_TAB), KC_NO,                                          LT(LR_ARROWS, KC_SPC), LT(LR_WILDS, KC_ENT), OSL(LR_WILDS)
 ),
 [LR_ARROWS] = LAYOUT_split_3x6_3(
     // 1st row:
-    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_NO, KC_HOME, KC_NO, KC_END, KC_NO, KC_NO,
+    TD(ESC_MAIN), KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                            KC_PGUP, KC_HOME, KC_UP, KC_END, KC_NO, KC_NO,
     // 2nd row:
-    KC_TAB, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_PGUP, KC_LEFT, KC_DOWN, KC_UP, KC_RGHT, KC_ENT,
+    KC_DEL, KC_LGUI, KC_LALT, KC_LCTL, KC_LSFT, KC_BTN1,                        KC_PGDN, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_BSPC,
     // 3rd row:
-    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_PGDN,  KC_NO, KC_NO, KC_APP, KC_NO, KC_NO,
+    KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   KC_NO, KC_NO, KC_NO, KC_NO, KC_APP, KC_NO,
     // 4th row:
-    KC_DEL, MO(LR_MOUSE), KC_NO,                                                LT(LR_NUMS, KC_SPC), OSL(LR_WILDS), KC_BSPC
+    KC_NO, LT(LR_NUMS, KC_TAB), LT(LR_MOUSE, KC_SPC),                           KC_NO, LT(LR_WILDS, KC_ENT), OSL(LR_WILDS)
 ),
 [LR_SERVICE] = LAYOUT_split_3x6_3(
     // 1st row:
@@ -467,26 +467,26 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
     // 3rd row:
     KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO,                                   MRS_SWITCH_LANG, MRS_LANG_HOTKEY_0, MRS_LANG_HOTKEY_1, MRS_LANG_HOTKEY_2, MRS_LANG_HOTKEY_3, KC_NO,
     // 4th row:
-    KC_MUTE, KC_VOLD, KC_VOLU,                                                  KC_MPLY, KC_MPRV, KC_MNXT
+    KC_VOLD, KC_VOLU, KC_MUTE,                                                  KC_MPLY, KC_MPRV, KC_MNXT
 ),
 [LR_GAME1] = LAYOUT_split_3x6_3(
     // 1st row:
     KC_TAB, KC_Q, KC_W, KC_E, KC_R, KC_T,                                       KC_Y, KC_U, KC_I, KC_O, KC_P, KC_ESC,
     // 2nd row:
-    KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                      KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_ENT,
+    KC_LSFT, KC_A, KC_S, KC_D, KC_F, KC_G,                                      KC_H, KC_J, KC_K, KC_L, KC_SCLN, KC_BSPC,
     // 3rd row:
     KC_LCTL, KC_Z, KC_X, KC_C, KC_V, KC_B,                                      KC_N, KC_M, KC_SLSH, TD(COLONS), TD(COMDOT), TO(LR_MAIN),
     // 4th row:
-    TO(LR_GAME2), KC_LALT, KC_SPC,                                              KC_SPC, KC_LALT, KC_BSPC
+    TO(LR_GAME2), KC_LALT, KC_SPC,                                              KC_SPC, KC_ENT, KC_LALT
 ),
 [LR_GAME2] = LAYOUT_split_3x6_3(
     // 1st row:
     KC_1, KC_2, KC_3, KC_4, KC_5, KC_ESC,                                       KC_NO, KC_NO, KC_UP, KC_NO, KC_NO, KC_ESC,
     // 2nd row:
-    KC_CAPS, GUI_T(KC_F1), ALT_T(KC_F2), CTL_T(KC_F3), SFT_T(KC_F4), KC_ENT,    KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_ENT,
+    KC_CAPS, GUI_T(KC_F1), ALT_T(KC_F2), CTL_T(KC_F3), SFT_T(KC_F4), KC_ENT,    KC_NO, KC_LEFT, KC_DOWN, KC_RGHT, KC_NO, KC_BSPC,
     // 3rd row:
     KC_NO, KC_F5, KC_F6, KC_F7, KC_F8,                                          KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, KC_NO, TO(LR_MAIN),
     // 4th row:
-    KC_NO, KC_LALT, KC_SPC,                                                     KC_SPC, KC_LALT, KC_BSPC
+    KC_NO, KC_LALT, KC_SPC,                                                     KC_SPC, KC_LALT, KC_ENT
 )
 };
