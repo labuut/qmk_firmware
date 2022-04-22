@@ -14,6 +14,14 @@ enum {
 };
 #define DEFAULT_LANG EN;
 int CURRENT_LANG = DEFAULT_LANG;
+int LANG_ON_CHANGE_TO_WILD_LAYER = DEFAULT_LANG;
+
+enum {
+    WILD_LAYER_ON = 0,
+    WILD_LAYER_OFF,
+};
+#define DEFAULT_WILD_LAYER_STATE WILD_LAYER_OFF;
+int CURRENT_WILD_LAYER_STATE = DEFAULT_WILD_LAYER_STATE;
 
 enum {
     CAPS_SHIFT = 0,
@@ -64,6 +72,7 @@ void switch_lang_to(int lang) {
     }
 
     CURRENT_LANG = lang;
+    LANG_ON_CHANGE_TO_WILD_LAYER = lang;
 
     if (is_shft_held) register_code(KC_LSFT);
     if (is_ctrl_held) register_code(KC_LCTL);
@@ -391,6 +400,32 @@ qk_tap_dance_action_t tap_dance_actions[] = {
 
     // [SP_A_M] = ACTION_TAP_DANCE_FN_ADVANCED(NULL, spam_finished, spam_reset),           // Space Arrows Mouse
 };
+
+// turn on EN layer on switch to LR_WILDS
+layer_state_t layer_state_set_kb(layer_state_t state) {
+    bool is_wild_layer_on = IS_LAYER_ON_STATE(state, LR_WILDS);
+    bool is_wild_layer_off = IS_LAYER_OFF_STATE(state, LR_WILDS);
+    bool prev_is_wild_layer_on = CURRENT_WILD_LAYER_STATE == WILD_LAYER_ON;
+
+    bool is_en = CURRENT_LANG == EN;
+    bool is_en_on_change_to_wild_layer = LANG_ON_CHANGE_TO_WILD_LAYER == EN;
+
+    if (is_wild_layer_on && !prev_is_wild_layer_on) {
+        CURRENT_WILD_LAYER_STATE = WILD_LAYER_ON;
+        LANG_ON_CHANGE_TO_WILD_LAYER = CURRENT_LANG;
+
+        if (!is_en) switch_lang_to(EN);
+    }
+
+    if (is_wild_layer_off && prev_is_wild_layer_on) {
+        CURRENT_WILD_LAYER_STATE = WILD_LAYER_OFF;
+
+        if (!is_en_on_change_to_wild_layer) switch_lang_to(LANG_ON_CHANGE_TO_WILD_LAYER);
+    }
+
+    return state;
+}
+
 
 // Keymaps
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
